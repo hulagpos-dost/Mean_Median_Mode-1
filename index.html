@@ -1,0 +1,6080 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  ...
+
+  <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700;800&display=swap');
+
+/* =====================================================
+  HULAGPOS — BREAKTHROUGH DESIGN SYSTEM
+  GRAPHITE / HERITAGE GREEN / BREAKTHROUGH GOLD
+  Original JS IDs and orbit motion preserved.
+===================================================== */
+:root {
+  --bg:#111619; --ink:#171c21; --ink-soft:#21282c;
+  --forest:#24352e; --forest-dark:#192a24;
+  --gold:#e3b84a; --gold-light:#f2d78a;
+  --paper:#f4f0e8; --paper-2:#e7e1d5;
+  --white:#f4f0e8; --muted:#b6bcb7;
+  --line:#3b4746; --line-strong:#6e7974;
+  --green:#a0d4ad; --red:#ee8075;
+  --display:'Barlow Condensed',Impact,sans-serif;
+  --body:'Source Sans 3',Arial,sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+}
+* { box-sizing:border-box; }
+html { background:var(--bg); }
+body {
+  margin:0; min-height:100vh; overflow-x:hidden; color:var(--paper);
+  font-family:var(--body); font-size:16px;
+  background:radial-gradient(ellipse at 85% -15%,rgba(36,53,46,.5),transparent 50%),#111619;
+}
+button,input { font:inherit; }
+button { border:0; cursor:pointer; }
+button:focus-visible,input:focus-visible { outline:2px solid var(--gold); outline-offset:4px; }
+.hidden { display:none!important; }
+::selection { background:var(--gold); color:var(--ink); }
+.math-bg {
+  position:fixed; inset:0; overflow:hidden; pointer-events:none;
+  display:flex; align-items:center; justify-content:space-around;
+  color:rgba(244,240,232,.028); font:900 clamp(4rem,14vw,14rem) var(--display);
+  transform:rotate(-13deg); white-space:nowrap;
+}
+.math-bg span:nth-child(even) { transform:translateY(120px); }
+.app { position:relative; z-index:1; width:min(1120px,calc(100% - 32px)); margin:24px auto 40px; }
+.hero,.panel { border:1px solid var(--line); }
+.hero { position:relative; overflow:hidden; padding:25px 37px 20px; background:linear-gradient(125deg,#1a2526 0%,#192c24 68%,#202c29 100%); }
+.hero::before { content:''; position:absolute; top:0; left:0; width:104px; height:5px; background:var(--gold); }
+.hero::after { content:''; position:absolute; right:-120px; top:-155px; height:420px; width:420px; border:1px solid rgba(227,184,74,.09); border-radius:50%; pointer-events:none; }
+.hero-top,.hero-bottom { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.hero-top { position:relative; z-index:3; padding-bottom:17px; border-bottom:1px solid rgba(244,240,232,.14); }
+.brand { display:flex; align-items:center; gap:12px; color:var(--paper); }
+.chain-logo { display:grid; place-items:center; width:47px; height:43px; border:1px solid #5e665e; color:var(--paper); transform:skew(-7deg); }
+.chain-logo svg { width:35px; height:31px; overflow:visible; }
+.brand-name { font:900 1.58rem/.9 var(--display); letter-spacing:.055em; }
+.brand-name small { display:block; font:600 .56rem/1.8 var(--mono); letter-spacing:.33em; color:var(--gold); }
+.edition,.hero-bottom,.eyebrow,.hero-tags,.setting-kicker,.field-label,.live,footer { font-family:var(--mono); }
+.edition { font-size:.61rem; letter-spacing:.1em; color:#c9c9bd; }
+.edition b { color:var(--gold); }
+.hero-grid { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr); gap:12px; align-items:center; min-height:335px; }
+.hero-content { position:relative; z-index:2; padding:19px 0 25px; }
+.eyebrow { color:var(--gold); margin:0 0 14px; font-size:.65rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+.eyebrow-line { display:inline-block; vertical-align:middle; height:2px; width:26px; background:var(--gold); margin-right:9px; }
+h1,h2,p { margin-top:0; }
+h1,h2 { font-family:var(--display); text-transform:uppercase; }
+h1 { font-size:clamp(4rem,7.8vw,7.4rem); font-weight:900; line-height:.78; letter-spacing:.015em; margin:0 0 27px; }
+h1 em { font-style:normal; color:var(--gold); }
+h2 { font-size:clamp(2.1rem,3.3vw,3.2rem); font-weight:800; line-height:.95; letter-spacing:.02em; margin:0 0 10px; }
+.hero-copy { max-width:475px; font-size:1rem; line-height:1.45; color:#c8cec7; margin:0 0 23px; }
+.hero-tags { display:flex; flex-wrap:wrap; gap:0; }
+.hero-tags span { color:#d5d3c8; font-size:.59rem; letter-spacing:.07em; padding:8px 12px; border:1px solid #52605c; margin:0 -1px -1px 0; }
+.hero-tags span:first-child { color:var(--gold); border-left:3px solid var(--gold); }
+.hero-bottom { border-top:1px solid rgba(244,240,232,.15); padding-top:14px; font-size:.54rem; letter-spacing:.14em; color:#a8b1a8; }
+.broken-rule { display:flex; gap:5px; align-items:center; }
+.broken-rule i { display:block; width:22px; height:4px; background:#626b62; transform:skew(-23deg); }
+.broken-rule i:nth-child(3) { background:var(--gold); width:10px; transform:translateY(-4px) rotate(22deg); }
+
+/* SIGNATURE ORBIT — PRESERVED ANIMATIONS */
+.hero-art { position:relative; display:grid; place-items:center; width:340px; height:315px; margin:auto; isolation:isolate; }
+.orbit { position:absolute; top:50%; left:50%; border:1.5px solid rgba(227,184,74,.45); border-radius:50%; pointer-events:none; z-index:1; transform-origin:center center; will-change:transform; }
+.orbit-a { width:275px; height:210px; animation:statsOrbitOne 9s linear infinite; }
+.orbit-b { width:300px; height:150px; border-color:rgba(244,240,232,.38); animation:statsOrbitTwo 7s linear infinite; }
+.orbit-track { position:absolute; height:290px; width:290px; border:1px dashed rgba(244,240,232,.12); border-radius:50%; pointer-events:none; }
+@keyframes statsOrbitOne { from { transform:translate(-50%,-50%) rotate(0deg); } to { transform:translate(-50%,-50%) rotate(360deg); } }
+@keyframes statsOrbitTwo { from { transform:translate(-50%,-50%) rotate(-30deg); } to { transform:translate(-50%,-50%) rotate(-390deg); } }
+.core { position:relative; z-index:3; width:154px; height:154px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#202c29; border:2px solid var(--gold); box-shadow:0 0 0 9px rgba(227,184,74,.04); clip-path:polygon(18% 0,82% 0,100% 18%,100% 82%,82% 100%,18% 100%,0 82%,0 18%); }
+.core small,.core span { color:var(--gold); font:600 .53rem var(--mono); letter-spacing:.075em; }
+.core strong { font:800 5rem/.98 var(--display); color:var(--paper); }
+.chip { position:absolute; z-index:6; display:grid; place-items:center; min-width:49px; height:45px; padding:7px 11px; border:1px solid var(--gold); background:var(--gold); color:#19201d; font:800 1.34rem var(--display); box-shadow:5px 5px 0 rgba(0,0,0,.3); white-space:nowrap; }
+.hero-art .chip { top:50%!important; left:50%!important; right:auto!important; bottom:auto!important; margin:0!important; offset-path:circle(135px at 50% 50%)!important; offset-rotate:0deg!important; animation:chipTravel 12s linear infinite!important; animation-play-state:running!important; }
+.hero-art .chip.one { animation-delay:0s!important; }
+.hero-art .chip.two { animation-delay:-4s!important; }
+.hero-art .chip.three { animation-delay:-8s!important; }
+@keyframes chipTravel { from { offset-distance:0%; } to { offset-distance:100%; } }
+
+/* TRAINING CONFIGURATION */
+main { margin-top:16px; }
+.panel { padding:32px 37px; background:#1b2225; }
+.section-header,.game-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:18px; margin-bottom:26px; }
+.muted { color:var(--muted); line-height:1.5; font-size:.94rem; margin:0; }
+.live { align-self:flex-start; display:inline-flex; align-items:center; gap:9px; border:1px solid #556259; color:#d1d8d0; padding:9px 11px; font-size:.62rem; letter-spacing:.08em; white-space:nowrap; }
+.live i { width:7px; height:7px; background:var(--gold); transform:rotate(45deg); }
+.setting-kicker { display:flex; justify-content:space-between; gap:10px; padding:0 0 9px; border-bottom:1px solid #56615b; font-size:.65rem; color:var(--gold); letter-spacing:.1em; margin-bottom:11px; }
+.setting-kicker span { color:#a1a9a3; }
+.setting { width:100%; min-width:0; display:flex; gap:14px; align-items:center; text-align:left; color:var(--paper); padding:17px; background:#232d2d; border:1px solid #515d59; transition:background .15s,border-color .15s,transform .15s; }
+.setting:hover { background:#293b34; border-color:var(--gold); transform:translateY(-2px); }
+.setting-icon { width:45px; height:47px; flex:0 0 45px; display:grid; place-items:center; border-right:2px solid var(--gold); color:var(--gold); font:700 1.45rem var(--display); }
+.setting-body { flex:1; min-width:0; }
+.setting-body small,.field-label { display:block; color:var(--gold); font:600 .62rem var(--mono); letter-spacing:.09em; margin-bottom:6px; }
+.setting-body strong { display:block; color:var(--paper); font-size:1.07rem; line-height:1.15; overflow-wrap:anywhere; }
+.chevron { font:600 1.7rem var(--display); color:var(--gold); }
+.settings-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; margin-top:11px; }
+.time-panel { display:flex; justify-content:space-between; align-items:end; gap:20px; flex-wrap:wrap; padding:20px; margin:16px 0; background:#151c1d; border-left:3px solid var(--gold); border-top:1px solid #434e4a; border-right:1px solid #434e4a; border-bottom:1px solid #434e4a; }
+.switches { display:flex; gap:0; }
+.switch { min-width:116px; padding:11px 16px; color:#bac2ba; background:transparent; border:1px solid #55615b; font:700 .71rem var(--mono); letter-spacing:.05em; }
+.switch+.switch { border-left:0; }
+.switch.active { color:#19211e; background:var(--gold); border-color:var(--gold); }
+.time-fields { display:flex; align-items:end; gap:9px; }
+.time-fields label { display:block; text-align:center; font:600 .65rem var(--mono); color:var(--gold); }
+.time-fields input { display:block; width:70px; padding:9px 6px; margin-top:4px; border:1px solid #78837a; color:var(--paper); background:#1f2928; text-align:center; border-radius:0; }
+.time-fields>span { padding-bottom:12px; color:var(--gold); }
+.primary,.outline,.small-danger { min-height:54px; padding:13px 19px; font:800 1.1rem var(--display); letter-spacing:.055em; text-transform:uppercase; border-radius:0; transition:background .16s,color .16s,transform .16s,border-color .16s; }
+.primary { background:var(--gold); color:#171c21; border:1px solid var(--gold); }
+.primary:hover { background:var(--gold-light); border-color:var(--gold-light); transform:translateY(-1px); }
+.primary:disabled { opacity:.55; cursor:default; }
+.primary span { float:right; }
+.panel>#start { width:100%; text-align:left; font-size:1.5rem; min-height:66px; padding:15px 22px; }
+.outline { color:var(--paper); border:1px solid #6b776f; background:transparent; }
+.outline:hover { color:var(--gold); border-color:var(--gold); background:rgba(227,184,74,.04); }
+.small-danger { min-height:39px; padding:8px 14px; border:1px solid #aa6e6b; background:transparent; color:#edb4ad; font-size:.93rem; }
+.small-danger:hover { background:#492f30; }
+.setup-footnote { text-align:center; font:600 .61rem var(--mono); letter-spacing:.19em; color:#979f97; margin:16px 0 0; }
+
+/* LIVE GAME — QUIETER THAN LANDING */
+.game-panel { background:#1b2224; }
+.stats,.result-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; background:#515a56; border:1px solid #515a56; }
+.stats>div,.result-grid>div { background:#202a2a; padding:16px 18px; min-width:0; }
+.stats small,.result-grid small { display:block; color:#b1bcb5; font:600 .64rem var(--mono); letter-spacing:.05em; margin-bottom:5px; }
+.stats strong,.result-grid strong { display:block; color:var(--paper); font:800 clamp(1.4rem,3vw,2.2rem)/1 var(--display); overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
+.stats>div:nth-child(3) strong { color:#f3a29b; }
+.stats>div:nth-child(2) strong { color:var(--gold); }
+.time-track { height:5px; background:#3e4441; margin:13px 0; overflow:hidden; }
+.time-track div { width:100%; height:100%; background:var(--gold); transition:width .2s linear; }
+.question-card { margin-top:16px; padding:27px 30px 30px; background:#f4f0e8; color:#21272a; border:1px solid #b1ada2; border-top:5px solid var(--gold); }
+.question-top { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-bottom:16px; border-bottom:1px solid #c8c3b9; margin-bottom:27px; }
+.question-index { font:600 .58rem var(--mono); letter-spacing:.11em; color:#63706b; }
+.question-tags { display:flex; gap:5px; flex-wrap:wrap; }
+.question-tags span { padding:6px 9px; color:#2a3b34; border:1px solid #9ba89e; font:700 .58rem var(--mono); letter-spacing:.035em; }
+.question-tags span:first-child { background:#24352e; color:#f5f1e8; border-color:#24352e; }
+.question { font:700 clamp(1.35rem,2.5vw,1.85rem)/1.35 var(--body); letter-spacing:-.012em; max-width:890px; margin:0 auto 9px; text-align:left; overflow-wrap:anywhere; }
+.instruction { text-align:left; font:500 .82rem/1.45 var(--body); color:#69716d; margin:0 0 23px; }
+.choices { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.choice { position:relative; display:flex; align-items:center; justify-content:center; min-height:68px; padding:14px 12px; border:1px solid #adafa6; background:#fffcf5; color:#232b28; border-radius:0; font:700 1.2rem/1.3 var(--body); transition:background .12s,border-color .12s,transform .12s; overflow-wrap:anywhere; }
+.choice::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:transparent; }
+.choice:hover:not(:disabled) { border-color:#273d32; background:#e8e9df; transform:translateY(-1px); }
+.choice.selected { background:#e7dbc1; border:2px solid #9c7830; color:#28241c; }
+.choice.selected::before { background:#9c7830; }
+.choice:disabled { cursor:default; }
+.choice.correct-choice,.choice.correct-choice:disabled { background:#dcebdc!important; border:2px solid #36845e!important; color:#173e2a!important; box-shadow:none!important; }
+.choice.correct-choice::before { background:#36845e; }
+.choice.wrong-choice,.choice.wrong-choice:disabled { background:#f6dfda!important; border:2px solid #c54a43!important; color:#772823!important; box-shadow:none!important; }
+.choice.wrong-choice::before { background:#c54a43; }
+.typed-area { max-width:670px; margin:0 auto; text-align:left; }
+.typed-area label { display:block; margin-bottom:9px; font:700 .67rem var(--mono); letter-spacing:.09em; color:#30423a; }
+.typed-area input { display:block; width:100%; border:2px solid #8b978d; border-radius:0; padding:14px 16px; background:white; color:#1f2925; font:600 1.6rem var(--mono); text-align:center; }
+.typed-area input:focus { outline:none; border-color:#a27c29; box-shadow:0 0 0 3px rgba(227,184,74,.18); }
+.typed-area small { display:block; margin-top:9px; color:#626d66; font-size:.78rem; }
+.feedback { max-width:800px; text-align:left; margin:19px auto 0; padding:15px 17px; min-height:0; border:1px solid transparent; font:600 .96rem/1.5 var(--body); }
+.feedback:empty { display:none; }
+.feedback.good { color:#22593b; background:#e0efdf; border-color:#79ae84; }
+.feedback.bad { color:#88302d; background:#f6e1db; border-color:#d6968a; }
+.feedback-title { display:block; font:800 1.2rem var(--display); letter-spacing:.035em; }
+.feedback-detail { display:block; font:500 .89rem var(--body); }
+.feedback-detail strong { font-weight:800; }
+.solution { max-width:800px; margin:15px auto 0; padding:20px 22px; background:#e8e5db; color:#2b3631; border-left:4px solid #a17b27; text-align:left; font-size:.97rem; line-height:1.7; overflow-wrap:anywhere; }
+.solution strong { color:#263e32; }
+.solution p { margin:0 0 9px; }
+.solution p:last-child { margin-bottom:0; }
+.actions { display:flex; gap:11px; margin-top:13px; }
+.actions>* { flex:1; }
+.result-grid { margin:24px 0; }
+.review { display:grid; gap:7px; }
+.review-item { padding:13px 16px; background:#232d2c; color:#eae9df; border-left:4px solid #7b8580; font-size:.87rem; line-height:1.5; }
+.review-item.good { border-left-color:#86bf9b; }
+.review-item.bad { border-left-color:#e48a80; }
+.review-item small { display:block; color:#aebdb4; margin-top:3px; }
+footer { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:18px 4px 0; color:#acb3ac; font:600 .59rem var(--mono); letter-spacing:.06em; }
+footer b { color:var(--gold); }
+
+/* MODAL — EXAM CONTROL STATION */
+.modal-backdrop { position:fixed; inset:0; z-index:30; display:grid; place-items:center; padding:16px; background:rgba(6,10,11,.87); backdrop-filter:blur(6px); }
+.modal { width:min(650px,100%); max-height:88vh; overflow:hidden; display:flex; flex-direction:column; background:#222c2c; border:1px solid #7b7f70; border-top:5px solid var(--gold); box-shadow:17px 17px 0 rgba(0,0,0,.3); }
+.modal-head { display:flex; justify-content:space-between; align-items:flex-start; gap:15px; padding:23px 25px 16px; border-bottom:1px solid #57615b; }
+.modal-head .eyebrow { margin-bottom:11px; }
+.close { width:38px; height:38px; background:transparent; color:var(--paper); border:1px solid #6b766e; font:700 1.6rem var(--display); }
+.close:hover { background:#3b4441; border-color:var(--gold); }
+.modal-options { display:grid; gap:9px; overflow-y:auto; padding:18px 25px; }
+.option { display:flex; align-items:center; gap:13px; width:100%; min-height:65px; padding:14px; text-align:left; color:var(--paper); background:#182121; border:1px solid #505e57; }
+.option:hover { border-color:#ad9971; background:#26332c; }
+.option.active { border-color:var(--gold); background:#35352a; }
+.option-mark { flex:0 0 37px; width:37px; height:37px; display:grid; place-items:center; border:1px solid #71796d; font:700 1.15rem var(--mono); color:var(--gold); }
+.option.active .option-mark { background:var(--gold); color:#161d1a; border-color:var(--gold); }
+.option strong { display:block; font-size:.96rem; font-weight:800; }
+.option small { display:block; font-size:.8rem; line-height:1.35; margin-top:3px; color:#b7c0b8; }
+.modal-footer { padding:14px 25px 25px; display:flex; gap:10px; }
+.modal-footer>* { flex:1; }
+
+@media (max-width:850px) {
+  .hero-grid { grid-template-columns:1fr; }
+  .hero-content { padding-bottom:0; }
+  .hero-art { height:275px; margin-top:4px; }
+  .hero-bottom span:last-child { display:none; }
+}
+@media (max-width:600px) {
+  .app { width:calc(100% - 16px); margin:8px auto 25px; }
+  .hero { padding:21px 18px 16px; }
+  .panel { padding:23px 15px; }
+  .edition { display:none; }
+  .hero-grid { min-height:0; }
+  h1 { font-size:clamp(4rem,16vw,6rem); margin-bottom:22px; }
+  h2 { font-size:2.35rem; }
+  .hero-copy { font-size:.93rem; }
+  .hero-tags span { font-size:.51rem; padding:7px 9px; }
+  .hero-art { width:min(100%,290px); height:275px; margin:10px auto; }
+  .orbit-a { width:235px; height:190px; }
+  .orbit-b { width:260px; height:140px; }
+  .orbit-track { height:240px; width:240px; }
+  .core { height:125px; width:125px; }
+  .core strong { font-size:4.3rem; }
+  .core small,.core span { font-size:.45rem; }
+  .chip { min-width:42px; height:39px; font-size:1.1rem; }
+  .hero-art .chip { offset-path:circle(112px at 50% 50%)!important; }
+  .section-header,.game-heading { align-items:flex-start; gap:11px; }
+  .live { font-size:.53rem; padding:7px; }
+  .setting-kicker span { display:none; }
+  .settings-grid { grid-template-columns:1fr; }
+  .time-panel { padding:16px; }
+  .stats,.result-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .stats>div,.result-grid>div { padding:13px 15px; }
+  .question-card { padding:20px 15px 22px; }
+  .question-top { align-items:flex-start; gap:9px; }
+  .question { font-size:1.28rem; }
+  .choices { grid-template-columns:1fr; }
+  .choice { min-height:58px; }
+  .actions { flex-direction:column; }
+  .modal-head { padding:20px 16px 14px; }
+  .modal-options { padding:13px 16px; }
+  .modal-footer { padding:13px 16px 18px; }
+  footer { font-size:.52rem; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .setting,.choice,.primary,.outline { transition:none; }
+  /* User-requested signature orbit continues moving. */
+}
+
+
+
+/* =========================================
+   HULAGPOS — FIXED CENTERED X-BAR
+========================================= */
+
+.core .mean-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  margin: 8px 0 4px;
+
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 65px;
+  font-weight: 800;
+  line-height: 1;
+  color: #f4f0e8;
+}
+
+.core .mean-x {
+  position: relative;
+  display: inline-block;
+
+  font: inherit;
+  line-height: 1;
+
+  padding-top: 8px;
+}
+
+/* Bar placed directly above the letter x */
+
+.core .mean-x::before {
+  content: "";
+  position: absolute;
+
+  width: 75%;
+  height: 5px;
+
+  top: 3px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background: currentColor;
+}
+
+
+
+
+
+/* =========================================
+   HULAGPOS — AFTER-ACTION REPORT
+========================================= */
+
+.results-panel {
+  --result-accent: #e3b84a;
+  --result-tint: rgba(227,184,74,.09);
+
+  padding: 32px;
+}
+
+/* SECTION INDEX */
+
+.results-overline,
+.results-summary-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+}
+
+.results-overline {
+  color: #e3b84a;
+  margin-bottom: 18px;
+}
+
+.results-overline span:last-child {
+  color: #8b9892;
+}
+
+/* ENDING BANNER */
+
+.result-banner {
+  position: relative;
+  overflow: hidden;
+
+  border: 1px solid var(--result-accent);
+  background:
+    linear-gradient(
+      115deg,
+      var(--result-tint),
+      rgba(25,31,29,.95) 75%
+    );
+
+  padding: 23px 26px 18px;
+}
+
+/* STATE-DEPENDENT COLOR */
+
+.results-panel.result-error {
+  --result-accent: #e6a080;
+  --result-tint: rgba(198,101,72,.12);
+}
+
+.results-panel.result-time {
+  --result-accent: #e3b84a;
+  --result-tint: rgba(227,184,74,.10);
+}
+
+.results-panel.result-quit {
+  --result-accent: #9caaa3;
+  --result-tint: rgba(156,170,163,.08);
+}
+
+.result-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100px;
+  height: 4px;
+  background: var(--result-accent);
+}
+
+.result-banner-top,
+.result-banner-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 700;
+  letter-spacing: .08em;
+  font-size: .61rem;
+}
+
+.result-banner-top {
+  color: var(--result-accent);
+  margin-bottom: 22px;
+}
+
+.result-banner-top span:last-child {
+  color: #8e9b95;
+}
+
+.result-headline-row {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 4px 0 24px;
+}
+
+.result-end-symbol {
+  flex: 0 0 94px;
+  width: 94px;
+  height: 94px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid
+    rgba(227,184,74,.24);
+
+  background: rgba(0,0,0,.13);
+  color: var(--result-accent);
+}
+
+.result-end-symbol svg {
+  width: 62px;
+  height: 62px;
+}
+
+#resultHeadline {
+  margin: 0 0 9px;
+
+  font-family:
+    "Barlow Condensed",
+    sans-serif;
+
+  font-weight: 900;
+  font-size: clamp(2.6rem,5vw,4.6rem);
+  line-height: .98;
+  letter-spacing: -.015em;
+
+  color: #f4f0e8;
+}
+
+#endReason {
+  max-width: 650px;
+  margin: 0;
+
+  font-family: "Source Sans 3", sans-serif;
+  font-size: .95rem;
+  line-height: 1.6;
+
+  color: #bfcbc4;
+}
+
+.result-banner-bottom {
+  color: #899990;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255,255,255,.10);
+}
+
+/* STATISTICS */
+
+.results-summary-heading {
+  margin: 29px 0 11px;
+  color: #e3b84a;
+}
+
+.results-summary-heading span:last-child {
+  color: #88978e;
+}
+
+.breakthrough-results-grid {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 0;
+
+  border: 1px solid #4b5753;
+}
+
+.breakthrough-results-grid > div {
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+
+  padding: 22px 19px;
+  background: #202b29;
+}
+
+.breakthrough-results-grid > div + div {
+  border-left: 1px solid #4b5753;
+}
+
+.breakthrough-results-grid small {
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: .06em;
+  font-size: .62rem;
+  color: #adbab2;
+}
+
+.breakthrough-results-grid strong {
+  display: block;
+  margin: 8px 0;
+
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(2.5rem,4vw,3.8rem);
+  font-weight: 800;
+  line-height: 1;
+
+  color: #f4f0e8;
+}
+
+.breakthrough-results-grid > div:nth-child(3) strong {
+  color: #e6a080;
+}
+
+.breakthrough-results-grid > div:nth-child(4) strong {
+  color: #e3b84a;
+}
+
+.result-stat-caption {
+  font-size: .75rem;
+  color: #91a098;
+}
+
+/* REVIEW HEADING */
+
+.results-review-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 15px;
+  margin: 36px 0 15px;
+}
+
+.results-review-heading div > span,
+.review-count {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .61rem;
+  letter-spacing: .09em;
+  font-weight: 700;
+  color: #e3b84a;
+}
+
+.results-review-heading h3 {
+  margin: 6px 0;
+  font-family: "Barlow Condensed",sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f4f0e8;
+}
+
+.results-review-heading p {
+  margin: 0;
+  font-size: .83rem;
+  color: #9daaa2;
+}
+
+.review-count {
+  color: #89988e;
+  white-space: nowrap;
+}
+
+/* REVIEW ITEMS */
+
+.results-panel .review {
+  display: grid;
+  gap: 8px;
+}
+
+.results-panel .review-item {
+  padding: 16px 18px;
+
+  border: 1px solid #414d47;
+  border-left: 4px solid #89968f;
+
+  background: #202b29;
+
+  border-radius: 0;
+
+  font-size: .89rem;
+  line-height: 1.6;
+  color: #e7e8df;
+}
+
+.results-panel .review-item.good {
+  border-left-color: #6cb48e;
+}
+
+.results-panel .review-item.bad {
+  border-left-color: #e6a080;
+}
+
+.results-panel .review-item small {
+  display: block;
+  margin-top: 7px;
+
+  font-size: .72rem;
+  color: #9eaaa3;
+}
+
+/* RESTART AREA */
+
+.results-next {
+  margin-top: 28px;
+  padding: 23px;
+
+  border: 1px solid #49564f;
+  background: #182321;
+}
+
+.results-next-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 17px;
+}
+
+.results-next-copy strong {
+  font-family: "Barlow Condensed",sans-serif;
+  font-size: 1.6rem;
+  color: #f4f0e8;
+}
+
+.results-next-copy span {
+  font-size: .85rem;
+  color: #a5b1a9;
+}
+
+.results-actions {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 10px;
+}
+
+.results-actions button {
+  width: 100%;
+  min-height: 56px;
+
+  border-radius: 0;
+  font-family: "Barlow Condensed",sans-serif;
+  font-size: 1.13rem;
+  letter-spacing: .015em;
+  font-weight: 800;
+}
+
+.result-restart {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px 19px;
+  background: #e3b84a;
+  color: #17211e;
+  box-shadow: none;
+}
+
+.result-restart span {
+  float: none;
+  font-size: 1.3rem;
+}
+
+.result-settings {
+  background: transparent;
+  color: #f4f0e8;
+  border: 1px solid #69766d;
+}
+
+/* MOBILE */
+
+@media (max-width: 680px) {
+  .results-panel {
+    padding: 18px;
+  }
+
+  .results-overline span:last-child,
+  .results-summary-heading span:last-child,
+  .review-count {
+    display: none;
+  }
+
+  .result-banner {
+    padding: 21px 16px 15px;
+  }
+
+  .result-headline-row {
+    gap: 13px;
+  }
+
+  .result-end-symbol {
+    flex-basis: 55px;
+    width: 55px;
+    height: 65px;
+  }
+
+  .result-end-symbol svg {
+    width: 42px;
+  }
+
+  #resultHeadline {
+    font-size: clamp(2.1rem,9vw,3.4rem);
+  }
+
+  .breakthrough-results-grid {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+
+  .breakthrough-results-grid > div:nth-child(3) {
+    border-left: 0;
+    border-top: 1px solid #4b5753;
+  }
+
+  .breakthrough-results-grid > div:nth-child(4) {
+    border-top: 1px solid #4b5753;
+  }
+
+  .results-review-heading h3 {
+    font-size: 1.65rem;
+  }
+
+  .results-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================
+   HULAGPOS — QUESTION WORKSPACE ALIGNMENT
+   Breakthrough Edition
+========================================= */
+
+/* Unified question workspace */
+
+.game-panel .question-card {
+  text-align: left;
+  padding: 26px 28px 28px;
+}
+
+/* Question header */
+
+.game-panel .question-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 25px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #c4c3b8;
+}
+
+.game-panel .question-index {
+  text-align: left;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.game-panel .question-tags {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Main question */
+
+.game-panel #prompt {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0 0 12px;
+  padding: 0;
+
+  text-align: left;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: -.012em;
+  color: #202b28;
+}
+
+/* Instructions */
+
+.game-panel #instruction {
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 0 0 22px;
+  padding: 0;
+
+  text-align: left;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: .87rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #69756e;
+}
+
+/* Choices as exam option rows */
+
+.game-panel .choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.game-panel .choice {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  width: 100%;
+  min-height: 62px;
+  margin: 0;
+  padding: 15px 18px;
+
+  text-align: left;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+
+  border-radius: 0;
+}
+
+/* Typed answers */
+
+.game-panel .typed-area {
+  width: 100%;
+  margin: 0;
+  text-align: left;
+}
+
+.game-panel .typed-area label,
+.game-panel .typed-area small {
+  text-align: left;
+}
+
+/* Feedback and worked solution */
+
+.game-panel .feedback,
+.game-panel .solution {
+  width: 100%;
+  max-width: none;
+  text-align: left;
+}
+
+/* Mobile */
+
+@media (max-width: 640px) {
+  .game-panel .question-card {
+    padding: 20px 16px;
+  }
+
+  .game-panel .question-top {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 9px;
+    margin-bottom: 19px;
+  }
+
+  .game-panel .question-tags {
+    justify-content: flex-start;
+  }
+
+  .game-panel .choices {
+    grid-template-columns: 1fr;
+  }
+
+  .game-panel .choice {
+    min-height: 56px;
+    padding: 14px 15px;
+  }
+}
+
+/* =========================================
+   HULAGPOS — TERMINAL FAIL STATE
+========================================= */
+
+/* hide the hero only when the run ends in failure mode */
+
+/* HIDE HERO AFTER ANY RUN ENDS */
+
+body.run-ended .hero {
+  display: none;
+}
+
+body.run-ended .app {
+  padding-top: 28px;
+}
+
+
+/* full results shell */
+.results-shell {
+  width: 100%;
+}
+
+.results-stage {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 0;
+  border: 1px solid #5f3a37;
+  background:
+    linear-gradient(135deg,
+      rgba(68, 25, 25, 0.92) 0%,
+      rgba(25, 24, 24, 0.98) 34%,
+      rgba(19, 25, 25, 0.98) 100%);
+  box-shadow: 0 30px 70px rgba(0,0,0,.35);
+}
+
+/* LEFT FAIL RAIL */
+.results-rail {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 22px;
+
+  min-height: 100%;
+  padding: 28px 22px;
+
+  background:
+    linear-gradient(180deg,
+      rgba(112, 37, 37, 0.95) 0%,
+      rgba(56, 25, 25, 0.95) 100%);
+  border-right: 1px solid rgba(255,255,255,.08);
+}
+
+.rail-label {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .65rem;
+  letter-spacing: .1em;
+  font-weight: 700;
+  color: #ffb199;
+  text-transform: uppercase;
+}
+
+.rail-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 84px;
+  height: 84px;
+
+  border: 1px solid rgba(255,177,153,.35);
+  background: rgba(0,0,0,.15);
+
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 3.2rem;
+  font-weight: 900;
+  line-height: 1;
+  color: #ff9f8a;
+}
+
+.rail-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.rail-copy strong {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .58rem;
+  letter-spacing: .1em;
+  font-weight: 700;
+  color: #ffc0b0;
+  text-transform: uppercase;
+}
+
+.rail-copy span {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: .95rem;
+  line-height: 1.45;
+  color: #f4dfd8;
+}
+
+.rail-code span {
+  color: #ffb69f;
+}
+
+/* MAIN PANEL */
+.results-main {
+  border: 0;
+  background: transparent;
+  padding: 26px 28px 30px;
+}
+
+.results-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 18px;
+
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: #c88f81;
+}
+
+.results-topline span:last-child {
+  color: #99817c;
+}
+
+/* BANNER */
+.failure-banner {
+  padding: 18px 0 8px;
+}
+
+.failure-kicker {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  margin-bottom: 12px;
+
+  border: 1px solid rgba(255,159,138,.26);
+  background: rgba(255,159,138,.06);
+
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: #ffab93;
+}
+
+#resultHeadline {
+  margin: 0 0 10px;
+
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(3.2rem, 6vw, 5.6rem);
+  line-height: .92;
+  font-weight: 900;
+  letter-spacing: -.02em;
+  color: #fff1eb;
+}
+
+.failure-reason {
+  max-width: 760px;
+  margin: 0;
+
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #d5bdb7;
+}
+
+.failure-divider {
+  height: 1px;
+  margin: 22px 0 24px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,154,134,.5),
+    rgba(255,154,134,.08)
+  );
+}
+
+/* STATS */
+.postmortem-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid #5f4a45;
+}
+
+.postmortem-card {
+  padding: 18px 16px;
+  background: rgba(255,255,255,.02);
+}
+
+.postmortem-card + .postmortem-card {
+  border-left: 1px solid #5f4a45;
+}
+
+.postmortem-card small {
+  display: block;
+  margin-bottom: 10px;
+
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: #c7bbb7;
+}
+
+.postmortem-card strong {
+  display: block;
+  margin-bottom: 8px;
+
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(2.7rem, 4vw, 4rem);
+  line-height: 1;
+  font-weight: 900;
+  color: #fff2eb;
+}
+
+.postmortem-card span {
+  display: block;
+  font-size: .8rem;
+  color: #aa9b96;
+}
+
+.postmortem-card.bad strong {
+  color: #ff9f8a;
+}
+
+.postmortem-card.accent strong {
+  color: #ffc15f;
+}
+
+/* AUTOPSY HEADING */
+.autopsy-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+
+  margin: 34px 0 14px;
+}
+
+.autopsy-kicker,
+.autopsy-note {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.autopsy-kicker {
+  color: #ffb69f;
+}
+
+.autopsy-head h3 {
+  margin: 7px 0 4px;
+
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 2.2rem;
+  line-height: 1;
+  font-weight: 900;
+  color: #fff1eb;
+}
+
+.autopsy-head p {
+  margin: 0;
+  font-size: .85rem;
+  color: #baa7a1;
+}
+
+.autopsy-note {
+  color: #ff9f8a;
+  white-space: nowrap;
+}
+
+/* REVIEW */
+.review-fail {
+  display: grid;
+  gap: 10px;
+}
+
+.review-fail .review-item {
+  border: 1px solid #624944;
+  border-left: 5px solid #7c625d;
+  background: rgba(255,255,255,.025);
+  padding: 16px 16px;
+  border-radius: 0;
+  color: #f0e5e0;
+}
+
+.review-fail .review-item.good {
+  border-left-color: #6cb48e;
+}
+
+.review-fail .review-item.bad {
+  border-left-color: #ff9f8a;
+  background: rgba(130, 44, 44, 0.10);
+}
+
+.review-fail .review-item small {
+  display: block;
+  margin-top: 8px;
+  color: #bca8a2;
+  font-size: .74rem;
+}
+
+/* FINAL ACTIONS */
+.fail-actions-wrap {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid #5a433e;
+  background: rgba(0,0,0,.12);
+}
+
+.fail-actions-copy {
+  margin-bottom: 16px;
+}
+
+.fail-actions-copy strong {
+  display: block;
+  margin-bottom: 4px;
+
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #fff0ea;
+}
+
+.fail-actions-copy span {
+  color: #baa49e;
+  font-size: .86rem;
+}
+
+.fatal-actions {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 12px;
+}
+
+.fatal-actions button {
+  min-height: 58px;
+  border-radius: 0;
+}
+
+.fatal-restart {
+  background: linear-gradient(90deg, #c86648, #e28e69);
+  color: #1d1716;
+  border: 0;
+  box-shadow: none;
+}
+
+
+.fatal-restart:hover {
+  background: #f0a081;
+  border-color: #f0a081;
+  color: #1d1716;
+}
+
+
+.fatal-settings {
+  border: 1px solid #84625b;
+  color: #fff0ea;
+  background: transparent;
+}
+
+/* FOOTER TINT DURING FAILURE */
+body.fail-state footer {
+  border-top-color: rgba(255,159,138,.18);
+  color: #a98a82;
+}
+
+/* MOBILE */
+@media (max-width: 860px) {
+  .results-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .results-rail {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+
+  .rail-symbol {
+    width: 68px;
+    height: 68px;
+    font-size: 2.4rem;
+  }
+
+  .postmortem-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .postmortem-card:nth-child(3),
+  .postmortem-card:nth-child(4) {
+    border-top: 1px solid #5f4a45;
+  }
+
+  .postmortem-card:nth-child(3) {
+    border-left: 0;
+  }
+
+  .autopsy-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .fatal-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =========================================
+   HULAGPOS — ALTERNATIVE RUN ENDINGS
+   Error limit stays red.
+========================================= */
+
+/* TIME EXPIRED — GOLD */
+
+#results.result-time .results-stage {
+  border-color: #a88a43;
+  background: linear-gradient(
+    135deg,
+    #332d20 0%,
+    #212622 45%,
+    #171d1d 100%
+  );
+}
+
+#results.result-time .results-rail {
+  background: linear-gradient(
+    180deg,
+    #5c4a24 0%,
+    #29281f 100%
+  );
+}
+
+#results.result-time .rail-symbol {
+  color: #f2ce79;
+  border-color: #a88a43;
+}
+
+#results.result-time .rail-label,
+#results.result-time .rail-copy strong,
+#results.result-time .rail-code span,
+#results.result-time .failure-kicker,
+#results.result-time .autopsy-kicker,
+#results.result-time .autopsy-note {
+  color: #f2ce79;
+}
+
+#results.result-time .failure-kicker {
+  border-color: rgba(242, 206, 121, .35);
+  background: rgba(242, 206, 121, .07);
+}
+
+#results.result-time .fatal-restart {
+  background: #e3b84a;
+  color: #171c21;
+}
+
+#results.result-time .fatal-restart:hover {
+  background: #f2d78a;
+}
+
+/* MANUAL EXIT — NEUTRAL GRAPHITE */
+
+#results.result-quit .results-stage {
+  border-color: #68756f;
+  background: linear-gradient(
+    135deg,
+    #293532 0%,
+    #1c2526 50%,
+    #171d20 100%
+  );
+}
+
+#results.result-quit .results-rail {
+  background: linear-gradient(
+    180deg,
+    #354740 0%,
+    #202b2a 100%
+  );
+}
+
+#results.result-quit .rail-symbol {
+  color: #c4d2c9;
+  border-color: #68756f;
+}
+
+#results.result-quit .rail-label,
+#results.result-quit .rail-copy strong,
+#results.result-quit .rail-code span,
+#results.result-quit .failure-kicker,
+#results.result-quit .autopsy-kicker,
+#results.result-quit .autopsy-note {
+  color: #c4d2c9;
+}
+
+#results.result-quit .failure-kicker {
+  border-color: rgba(196, 210, 201, .3);
+  background: rgba(196, 210, 201, .05);
+}
+
+#results.result-quit .fatal-restart {
+  background: #b8c6bc;
+  color: #171c21;
+}
+
+#results.result-quit .fatal-restart:hover {
+  background: #d7e1d9;
+}
+
+
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ==========================================
+       BACKGROUND MATHEMATICAL SYMBOLS
+  ========================================== -->
+
+  <div class="math-bg" aria-hidden="true">
+    <span>∑</span>
+    <span>μ</span>
+    <span>MEDIAN</span>
+    <span>∴</span>
+    <span>x̄</span>
+    <span>∑</span>
+  </div>
+
+
+  <!-- ==========================================
+       MAIN APPLICATION
+  ========================================== -->
+
+  <div class="app">
+
+
+    <!-- ========================================
+         01. HERO
+    ======================================== -->
+
+    <header class="hero">
+
+      <div class="hero-top">
+
+        <div class="brand">
+
+          <div
+            class="chain-logo"
+            aria-hidden="true"
+          >
+
+            <svg
+              viewBox="0 0 54 42"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+
+              <rect
+                x="3"
+                y="14"
+                width="25"
+                height="14"
+                rx="7"
+                transform="rotate(-35 3 14)"
+                stroke="currentColor"
+                stroke-width="4"
+              />
+
+              <rect
+                x="30"
+                y="18"
+                width="25"
+                height="14"
+                rx="7"
+                transform="rotate(-35 30 18)"
+                stroke="currentColor"
+                stroke-width="4"
+              />
+
+              <path
+                d="M23 14L19 7M30 24L36 31M24 23L18 27"
+                stroke="#E3B84A"
+                stroke-width="3"
+                stroke-linecap="square"
+              />
+
+            </svg>
+
+          </div>
+
+          <span class="brand-name">
+            HULAGPOS
+            <small>TUTORIALS</small>
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- HERO GRID -->
+
+      <div class="hero-grid">
+
+        <div class="hero-content">
+
+          <p class="eyebrow">
+            <span class="eyebrow-line"></span>
+            NO CALCULATOR BAKBAKAN
+          </p>
+
+          <h1>
+            CENTRAL TENDENCY<br>
+            <em>ARENA</em>
+          </h1>
+
+          <div class="hero-tags">
+            <span>01 / MEAN</span>
+            <span>02 / MEDIAN</span>
+            <span>03 / MODE</span>
+            <span>+ WEIGHTED MEAN</span>
+          </div>
+
+        </div>
+
+
+        <!-- ==================================
+             STATISTICS ORBIT
+             KEEP EXISTING CSS ANIMATIONS
+        ================================== -->
+
+        <div
+          class="hero-art"
+          role="img"
+          aria-label="Animated statistics orbit"
+        >
+
+          <div class="orbit orbit-a"></div>
+
+          <div class="orbit orbit-b"></div>
+
+          <div
+            class="orbit-track"
+            aria-hidden="true"
+          ></div>
+
+
+          <!-- CENTERED X-BAR -->
+
+          <div class="core">
+
+            <small>DESCRIPTIVE</small>
+
+            <strong class="mean-symbol">
+              <span class="mean-x">x</span>
+            </strong>
+
+            <span>STATISTICS</span>
+
+          </div>
+
+
+          <!-- MOVING SYMBOLS -->
+
+          <b class="chip one">Σx</b>
+
+          <b class="chip two">x̃</b>
+
+          <b class="chip three">Mo</b>
+
+        </div>
+
+      </div>
+
+
+      <!-- BROKEN CHAIN SEGMENTS -->
+
+      <div
+        class="broken-rule"
+        aria-hidden="true"
+      >
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+      </div>
+
+    </header>
+
+
+    <!-- ========================================
+         MAIN WORKFLOW
+    ======================================== -->
+
+    <main>
+
+
+      <!-- =====================================
+           02. SETUP SCREEN
+      ===================================== -->
+
+      <section
+        id="setup"
+        class="panel setup-panel"
+      >
+
+        <div class="section-header">
+
+          <div>
+
+            <p class="eyebrow">
+              01 / PREPARE YOUR BAKBAKAN
+            </p>
+
+            <h2>SET YOUR PARAMETERS.</h2>
+
+            <p class="muted">
+              Choose your Game Type, Intensity and Format.
+              Then enter the arena.
+            </p>
+
+          </div>
+
+          <span class="live">
+            <i></i>
+            SYSTEM READY
+          </span>
+
+        </div>
+
+
+        <!-- SETTINGS HEADING -->
+
+        <div class="setting-kicker">
+
+          TRAINING CONFIGURATION
+
+          <span>
+            MODIFY ANY PARAMETER ↗
+          </span>
+
+        </div>
+
+
+        <!-- GAME TYPE -->
+
+        <button
+          id="skillOpen"
+          class="setting setting-wide"
+          type="button"
+        >
+
+          <span class="setting-icon">
+            01
+          </span>
+
+          <span class="setting-body">
+
+            <small>Game Type</small>
+
+            <strong id="skillText">
+              Mean · Median · Mode
+            </strong>
+
+          </span>
+
+          <span class="chevron">
+            ↗
+          </span>
+
+        </button>
+
+
+        <!-- DIFFICULTY AND FORMAT -->
+
+        <div class="settings-grid">
+
+
+          <!-- DIFFICULTY -->
+
+          <button
+            id="diffOpen"
+            class="setting"
+            type="button"
+          >
+
+            <span class="setting-icon">
+              02
+            </span>
+
+            <span class="setting-body">
+
+              <small>
+                INTENSITY / DIFFICULTY
+              </small>
+
+              <strong id="diffText">
+                Intermediate
+              </strong>
+
+            </span>
+
+            <span class="chevron">
+              ↗
+            </span>
+
+          </button>
+
+
+          <!-- ANSWER FORMAT -->
+
+          <button
+            id="formatOpen"
+            class="setting"
+            type="button"
+          >
+
+            <span class="setting-icon">
+              03
+            </span>
+
+            <span class="setting-body">
+
+              <small>
+                RESPONSE / FORMAT
+              </small>
+
+              <strong id="formatText">
+                Multiple Choice
+              </strong>
+
+            </span>
+
+            <span class="chevron">
+              ↗
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <!-- =================================
+             TIMER SELECTION
+        ================================= -->
+
+        <div class="time-panel">
+
+          <div>
+
+            <small class="field-label">
+              04 / LIMITASYON
+            </small>
+
+            <div class="switches">
+
+              <button
+                type="button"
+                class="switch active"
+                data-clock="untimed"
+              >
+                UNTIMED
+              </button>
+
+              <button
+                type="button"
+                class="switch"
+                data-clock="timed"
+              >
+                TIMED
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- CUSTOM TIMER -->
+
+          <div
+            id="timeFields"
+            class="time-fields hidden"
+          >
+
+            <label>
+
+              MIN
+
+              <input
+                id="minutes"
+                type="number"
+                min="0"
+                max="240"
+                value="3"
+              >
+
+            </label>
+
+            <span>:</span>
+
+            <label>
+
+              SEC
+
+              <input
+                id="seconds"
+                type="number"
+                min="0"
+                max="59"
+                value="0"
+              >
+
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <!-- START -->
+
+        <button
+          id="start"
+          class="primary"
+          type="button"
+        >
+
+          BAKBAKAN NA
+
+          <span>↗</span>
+
+        </button>
+
+
+        <p class="setup-footnote">
+          TWO ERRORS. ONE RUN. BREAK THROUGH.
+        </p>
+
+      </section>
+
+
+      <!-- =====================================
+           03. ACTIVE GAME SCREEN
+      ===================================== -->
+
+      <section
+        id="game"
+        class="panel game-panel hidden"
+      >
+
+
+        <!-- GAME HEADING -->
+
+        <div class="game-heading">
+
+          <div>
+
+            <p class="eyebrow">
+              02 / LIVE TRAINING
+            </p>
+
+            <h2>STAY SHARP.</h2>
+
+          </div>
+
+          <button
+            id="quit"
+            class="small-danger"
+            type="button"
+          >
+            END RUN ×
+          </button>
+
+        </div>
+
+
+        <!-- =================================
+             GAME SCOREBOARD
+        ================================= -->
+
+        <div class="stats">
+
+          <div>
+
+            <small>QUESTION</small>
+
+            <strong id="qNum">
+              01
+            </strong>
+
+          </div>
+
+          <div>
+
+            <small>CORRECT</small>
+
+            <strong id="correct">
+              0
+            </strong>
+
+          </div>
+
+          <div>
+
+            <small>ERRORS / 02</small>
+
+            <strong id="wrong">
+              0
+            </strong>
+
+          </div>
+
+          <div>
+
+            <small>CLOCK</small>
+
+            <strong id="clock">
+              UNTIMED
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- TIMER PROGRESS -->
+
+        <div
+          id="timeTrack"
+          class="time-track hidden"
+        >
+          <div id="timeFill"></div>
+        </div>
+
+
+        <!-- =================================
+             QUESTION WORKSPACE
+        ================================= -->
+
+        <div class="question-card">
+
+
+          <!-- QUESTION HEADER -->
+
+          <div class="question-top">
+
+            <span class="question-index">
+              KATANUNGAN
+            </span>
+
+            <div class="question-tags">
+
+              <span id="skillTag">
+                MEAN
+              </span>
+
+              <span id="typeTag">
+                MEAN REASONING
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- GENERATED QUESTION -->
+
+          <div
+            id="prompt"
+            class="question"
+          >
+            Question
+          </div>
+
+
+          <!-- INSTRUCTIONS -->
+
+          <p
+            id="instruction"
+            class="instruction"
+          ></p>
+
+
+          <!-- MULTIPLE-CHOICE ANSWERS -->
+
+          <div
+            id="choices"
+            class="choices"
+          ></div>
+
+
+          <!-- =================================
+               TYPED ANSWER
+          ================================= -->
+
+          <div
+            id="typedArea"
+            class="typed-area hidden"
+          >
+
+            <label for="answer">
+              YOUR RESPONSE
+            </label>
+
+            <input
+              id="answer"
+              type="text"
+              autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
+              placeholder="e.g. 12 or 3/2"
+            >
+
+            
+<small id="answerHint">
+  Enter a number or fraction.
+</small>
+
+
+
+          </div>
+
+
+          <!-- FEEDBACK -->
+
+          <div
+            id="feedback"
+            class="feedback"
+            aria-live="polite"
+          ></div>
+
+
+          <!-- WORKED SOLUTION -->
+
+          <div
+            id="solution"
+            class="solution hidden"
+          ></div>
+
+        </div>
+
+
+        <!-- =================================
+             GAME ACTIONS
+        ================================= -->
+
+        <div class="actions">
+
+          <button
+            id="reveal"
+            class="outline"
+            type="button"
+          >
+            SHOW SOLUTION
+          </button>
+
+          <button
+            id="submit"
+            class="primary"
+            type="button"
+          >
+
+            CHECK ANSWER
+
+            <span>✓</span>
+
+          </button>
+
+          <button
+            id="next"
+            class="primary hidden"
+            type="button"
+          >
+
+            NEXT QUESTION
+
+            <span>→</span>
+
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================
+           04. TERMINAL RESULTS SCREEN
+      ===================================== -->
+
+      <section
+        id="results"
+        class="results-shell hidden"
+      >
+
+        <div class="results-stage">
+
+
+          <!-- =================================
+               LEFT STATUS RAIL
+          ================================= -->
+
+          <aside class="results-rail">
+
+            <div class="rail-label">
+              <span>
+                03 / TERMINAL REPORT
+              </span>
+            </div>
+
+            <div
+              class="rail-symbol"
+              aria-hidden="true"
+            >
+              ✕
+            </div>
+
+
+            <div class="rail-copy">
+
+              <strong>
+                RUN STATUS
+              </strong>
+
+              <span id="resultStatus">
+                RUN FAILED / ERROR LIMIT
+              </span>
+
+            </div>
+
+
+            <div class="rail-copy rail-code">
+
+              <strong>
+                REPORT CODE
+              </strong>
+
+              <span id="resultCode">
+                END / ERROR 02
+              </span>
+
+            </div>
+
+          </aside>
+
+
+          <!-- =================================
+               MAIN POST-RUN REPORT
+          ================================= -->
+
+          <section
+            id="resultsPanel"
+            class="results-main panel results-panel"
+          >
+
+
+            <!-- TOPLINE -->
+
+            <div class="results-topline">
+
+              <span>
+                POST-RUN DEBRIEF
+              </span>
+
+              <span>
+                HULAGPOS TUTORIALS / BAKBAKAN REPORT
+              </span>
+
+            </div>
+
+
+            <!-- =================================
+                 ENDING BANNER
+            ================================= -->
+
+            <div class="failure-banner">
+
+
+<div class="failure-kicker" id="endingKicker">
+  SESSION TERMINATED
+</div>
+
+
+              <h2 id="resultHeadline">
+                RUN FAILED.
+              </h2>
+
+              <p
+                id="endReason"
+                class="failure-reason"
+              >
+                You reached two total errors.
+                The arena has been shut down for this run.
+                Review the breakdown below and return better prepared.
+              </p>
+
+            </div>
+
+
+            <div class="failure-divider"></div>
+
+
+            <!-- =================================
+                 PERFORMANCE STATS
+            ================================= -->
+
+            <div class="postmortem-grid">
+
+
+              <!-- ATTEMPTED -->
+
+              <div class="postmortem-card">
+
+                <small>
+                  ATTEMPTED
+                </small>
+
+                <strong id="rTotal">
+                  0
+                </strong>
+
+                <span>
+                  Total questions faced
+                </span>
+
+              </div>
+
+
+              <!-- CORRECT -->
+
+              <div class="postmortem-card">
+
+                <small>
+                  CORRECT
+                </small>
+
+                <strong id="rCorrect">
+                  0
+                </strong>
+
+                <span>
+                  Successful responses
+                </span>
+
+              </div>
+
+
+              <!-- ERRORS -->
+
+              <div class="postmortem-card bad">
+
+                <small>
+                  ERRORS
+                </small>
+
+                <strong id="rWrong">
+                  0
+                </strong>
+
+                <span>
+                  Includes solution reveals
+                </span>
+
+              </div>
+
+
+              <!-- ACCURACY -->
+
+              <div class="postmortem-card accent">
+
+                <small>
+                  ACCURACY
+                </small>
+
+                <strong id="rAccuracy">
+                  0%
+                </strong>
+
+                <span>
+                  Overall run efficiency
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- =================================
+                 QUESTION AUTOPSY
+            ================================= -->
+
+            <div class="autopsy-head">
+
+              <div>
+
+                <span class="autopsy-kicker">
+                  QUESTION AUTOPSY / 01
+                </span>
+
+<h3 id="autopsyTitle">
+  WHERE YOU BROKE.
+</h3>
+
+
+                <p>
+                  Review each question from the run.
+                </p>
+
+              </div>
+
+              <div class="autopsy-note">
+                POST-RUN ANALYSIS
+              </div>
+
+            </div>
+
+
+            <!-- JS-GENERATED REVIEW -->
+
+            <div
+              id="review"
+              class="review review-fail"
+            ></div>
+
+
+            <!-- =================================
+                 RESTART ACTIONS
+            ================================= -->
+
+            <div class="fail-actions-wrap">
+
+              <div class="fail-actions-copy">
+
+                <strong>
+                  WHAT NOW?
+                </strong>
+
+                <span>
+                  Reset the arena with the same setup,
+                  or reconfigure your parameters.
+                </span>
+
+              </div>
+
+
+              <div class="results-actions fatal-actions">
+
+
+                <!-- RESTART -->
+
+                <button
+                  id="restart"
+                  class="primary result-restart fatal-restart"
+                  type="button"
+                >
+
+                  RUN IT BACK
+
+                  <span>↻</span>
+
+                </button>
+
+
+                <!-- CHANGE SETTINGS -->
+
+                <button
+                  id="back"
+                  class="outline result-settings fatal-settings"
+                  type="button"
+                >
+
+                  CHANGE PARAMETERS
+
+                </button>
+
+              </div>
+
+            </div>
+
+          </section>
+          <!-- END RESULTS PANEL -->
+
+        </div>
+        <!-- END RESULTS STAGE -->
+
+      </section>
+      <!-- END RESULTS -->
+
+    </main>
+    <!-- END MAIN -->
+
+
+    <!-- ========================================
+         SINGLE FOOTER
+    ======================================== -->
+
+    <footer>
+
+      <span>
+        HULAGPOS TUTORIALS
+        <b>✳</b>
+        CENTRAL TENDENCY ARENA
+      </span>
+
+      <span>
+        UPCAT-AUDD
+      </span>
+
+    </footer>
+
+  </div>
+  <!-- END MAIN APP -->
+
+
+  <!-- ==========================================
+       05. SETTINGS MODAL
+  ========================================== -->
+
+  <div
+    id="modal"
+    class="modal-backdrop hidden"
+  >
+
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+    >
+
+
+      <!-- MODAL HEADER -->
+
+      <div class="modal-head">
+
+        <div>
+
+          <p class="eyebrow">
+            HULAGPOS / CONFIGURATION
+          </p>
+
+          <h2 id="modalTitle">
+            SELECT OPTIONS
+          </h2>
+
+        </div>
+
+        <button
+          id="closeModal"
+          class="close"
+          type="button"
+          aria-label="Close"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <!-- DYNAMIC MODAL OPTIONS -->
+
+      <div
+        id="modalOptions"
+        class="modal-options"
+      ></div>
+
+
+      <!-- MODAL ACTIONS -->
+
+      <div class="modal-footer">
+
+        <button
+          id="allSkills"
+          class="outline hidden"
+          type="button"
+        >
+          SELECT ALL
+        </button>
+
+        <button
+          id="doneModal"
+          class="primary"
+          type="button"
+        >
+          CONFIRM SELECTION ✓
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+  <!-- END MODAL -->
+
+
+  <!-- ==========================================
+       APPLICATION JAVASCRIPT
+  ========================================== -->
+
+  <script src="./script.js"></script>
+
+</body>
+</html>
+
+
+  <script>
+
+ 
+'use strict';
+
+/* =====================================================
+   HULAGPOS TUTORIALS
+   DESCRIPTIVE STATISTICS ARENA
+
+   MEAN · MEDIAN · MODE
+   16 MEAN VARIATIONS
+   BALANCED QUESTION ROTATION
+   MIXED ANSWER FORMAT
+   2 TOTAL ERRORS = GAME OVER
+===================================================== */
+
+/* =====================================================
+   01. UTILITIES
+===================================================== */
+
+const $ = id => document.getElementById(id);
+
+const rand = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
+
+const pick = arr => arr[rand(0, arr.length - 1)];
+
+const shuffle = arr => {
+  const a = [...arr];
+
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = rand(0, i);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+
+  return a;
+};
+
+const sum = arr =>
+  arr.reduce((total, x) => total + x, 0);
+
+const sample = (min, max, n) =>
+  Array.from({ length: n }, () => rand(min, max));
+
+const gcd = (a, b) =>
+  b === 0 ? Math.abs(a) : gcd(b, a % b);
+
+function fraction(n, d = 1) {
+  if (d === 0) throw new Error('Zero denominator');
+
+  if (d < 0) {
+    n = -n;
+    d = -d;
+  }
+
+  const g = gcd(Math.abs(n), d) || 1;
+
+  n /= g;
+  d /= g;
+
+  return d === 1 ? String(n) : `${n}/${d}`;
+}
+
+const display = value =>
+  Array.isArray(value)
+    ? value.length
+      ? value.join(', ')
+      : 'No mode'
+    : String(value);
+
+const show = (id, visible) => {
+  $(id).classList.toggle('hidden', !visible);
+};
+
+function signedSum(arr) {
+  return arr
+    .map((x, i) =>
+      i === 0
+        ? String(x)
+        : x < 0
+          ? ` − ${Math.abs(x)}`
+          : ` + ${x}`
+    )
+    .join('');
+}
+
+/* =====================================================
+   02. SETTINGS
+===================================================== */
+
+let settings = {
+  skills: ['Mean', 'Median', 'Mode'],
+  difficulty: 'Intermediate',
+  format: 'Multiple Choice',
+  clock: 'untimed',
+  seconds: 180
+};
+
+const MAX_ERRORS = 2;
+const AUTO_NEXT_DELAY = 2000;
+
+const difficulties = [
+  'Beginner',
+  'Intermediate',
+  'Advanced'
+];
+
+const formats = [
+  'Multiple Choice',
+  'Type Answer',
+  'Mixed'
+];
+
+const skillDescriptions = {
+  Mean:
+    'Direct, algebraic, weighted, combined and advanced average problems.',
+  Median:
+    'Odd/even data, unsorted values and missing observations.',
+  Mode:
+    'Frequency analysis, single modes, multiple modes and no mode.'
+};
+
+/* =====================================================
+   03. GAME STATE
+===================================================== */
+
+function createState() {
+  return {
+    active: false,
+    question: null,
+    currentFormat: null,
+    selected: null,
+    locked: false,
+
+    correct: 0,
+    wrong: 0,
+    attempts: 0,
+
+    history: [],
+    gameOver: false,
+
+    lastSignature: '',
+    skillDeck: [],
+    meanDeck: [],
+    weightedDeck: [],
+    meanCount: 0,
+    medianDeck: [],
+    modeDeck: [],
+
+    remaining: 0,
+    deadline: 0,
+    timer: null,
+    autoNext: null,
+    pauseStarted: null
+  };
+}
+
+let state = createState();
+
+/* =====================================================
+   04. SETTINGS INTERFACE
+===================================================== */
+
+function refreshSettings() {
+  $('skillText').textContent =
+    settings.skills.join(' · ');
+
+  $('diffText').textContent = settings.difficulty;
+  $('formatText').textContent = settings.format;
+
+  document.querySelectorAll('[data-clock]').forEach(btn => {
+    btn.classList.toggle(
+      'active',
+      btn.dataset.clock === settings.clock
+    );
+  });
+
+  show('timeFields', settings.clock === 'timed');
+}
+
+function openModal(which) {
+  $('modalTitle').textContent =
+    which === 'skills'
+      ? 'SELECT GAME TYPE'
+      : which === 'difficulty'
+        ? 'SELECT INTENSITY'
+        : 'SELECT RESPONSE FORMAT';
+
+  show('allSkills', which === 'skills');
+
+  const items =
+    which === 'skills'
+      ? Object.keys(skillDescriptions)
+      : which === 'difficulty'
+        ? difficulties
+        : formats;
+
+  $('modalOptions').innerHTML = '';
+
+  items.forEach(item => {
+    const active =
+      which === 'skills'
+        ? settings.skills.includes(item)
+        : settings[which] === item;
+
+    const button = document.createElement('button');
+
+    button.type = 'button';
+    button.className =
+      'option' + (active ? ' active' : '');
+
+    const description =
+      which === 'skills'
+        ? skillDescriptions[item]
+        : item === 'Mixed' && which === 'format'
+          ? 'Randomly uses multiple choice or typed answers.'
+          : '';
+
+    button.innerHTML = `
+      <span class="option-mark">
+        ${active ? '✓' : '+'}
+      </span>
+      <span>
+        <strong>${item}</strong>
+        ${description
+          ? `<small>${description}</small>`
+          : ''}
+      </span>
+    `;
+
+    button.onclick = () => {
+      if (which === 'skills') {
+        if (settings.skills.includes(item)) {
+          if (settings.skills.length > 1) {
+            settings.skills = settings.skills.filter(
+              s => s !== item
+            );
+          }
+        } else {
+          settings.skills.push(item);
+        }
+      } else {
+        settings[which] = item;
+      }
+
+      openModal(which);
+    };
+
+    $('modalOptions').appendChild(button);
+  });
+
+  show('modal', true);
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  show('modal', false);
+  document.body.style.overflow = '';
+  refreshSettings();
+}
+
+/* =====================================================
+   05. BALANCED QUESTION ROTATION
+
+   Uses shuffled decks rather than
+   unrestricted random repetition.
+===================================================== */
+
+function takeFromDeck(property, available) {
+  const valid = new Set(available);
+
+  state[property] = state[property].filter(
+    item => valid.has(item)
+  );
+
+  if (!state[property].length) {
+    state[property] = shuffle(available);
+  }
+
+  return state[property].pop();
+}
+
+function chooseSkill() {
+  return takeFromDeck('skillDeck', settings.skills);
+}
+
+function chooseMeanType() {
+  const beginner = [
+    'direct',
+    'missing',
+    'consecutive',
+    'word',
+    'transformation',
+    'target'
+  ];
+
+  const intermediate = [
+    ...beginner,
+    'fraction',
+    'expressions',
+    'change',
+    'combined',
+    'correction',
+    'repeated',
+    'multipleChange'
+  ];
+
+  const advanced = [
+    ...intermediate,
+    'paired'
+  ];
+
+  const weighted = [
+    'weightedDirect',
+    'weightedUnknown',
+    'frequencyWeighted'
+  ];
+
+  const pool =
+    settings.difficulty === 'Beginner'
+      ? beginner
+      : settings.difficulty === 'Intermediate'
+        ? intermediate
+        : advanced;
+
+  let type;
+
+  if (
+    settings.difficulty !== 'Beginner' &&
+    state.meanCount % 4 === 0
+  ) {
+    // First Mean question is weighted.
+    // Every fourth Mean question is weighted.
+    type = takeFromDeck('weightedDeck', weighted);
+  } else {
+    type = takeFromDeck('meanDeck', pool);
+  }
+
+  state.meanCount++;
+
+  return type;
+}
+
+function chooseMedianType() {
+  const beginner = ['odd', 'even', 'unsorted', 'add'];
+  const intermediate = [
+    ...beginner, 'missing', 'fractional', 'remove',
+    'transform', 'frequency', 'outlier'
+  ];
+  const advanced = [
+    ...intermediate,
+    'algebraic', 'target', 'compare'
+  ];
+
+  const pool = settings.difficulty === 'Beginner'
+    ? beginner
+    : settings.difficulty === 'Intermediate'
+      ? intermediate
+      : advanced;
+
+  return takeFromDeck('medianDeck', pool);
+}
+
+function chooseModeType() {
+  const beginner = ['single', 'double', 'none', 'adding'];
+  const intermediate = [
+    ...beginner,
+    'triple', 'missingFreq', 'removing', 'transform'
+  ];
+  const advanced = [
+    ...intermediate,
+    'missingObs', 'comparison'
+  ];
+
+  const pool = settings.difficulty === 'Beginner'
+    ? beginner
+    : settings.difficulty === 'Intermediate'
+      ? intermediate
+      : advanced;
+
+  return takeFromDeck('modeDeck', pool);
+}
+
+/* =====================================================
+   06. MEAN QUESTION FACTORY
+
+   17 VARIATIONS:
+   01 Direct mean
+   02 Fractional mean
+   03 Missing observation
+   04 Algebraic expressions
+   05 Consecutive integers
+   06 Added/removed observation
+   07 Word problem
+   08 Weighted mean
+   09 Unknown weighted score
+   10 Frequency weighted mean
+   11 Combined mean
+   12 Transformation
+   13 Target average
+   14 Incorrectly recorded data
+   15 Multiple added/removed observations
+   16 Repeated variable
+   17 Two unknowns (advanced extension)
+===================================================== */
+
+function meanQuestion() {
+  const kind = chooseMeanType();
+
+  let prompt = '';
+  let answer = '';
+  let solution = '';
+  let meta = {};
+
+  const advanced =
+    settings.difficulty === 'Advanced';
+
+  /* -----------------------------------------
+     CASE 01: DIRECT COMPUTATION
+  ----------------------------------------- */
+
+  if (kind === 'direct') {
+    const n = rand(4, 8);
+
+    const values = sample(
+      advanced ? -25 : 1,
+      advanced ? 65 : 40,
+      n
+    );
+
+    const total = sum(values);
+
+    answer = fraction(total, n);
+
+    prompt =
+      `Find the mean of: ${values.join(', ')}.`;
+
+    solution = `
+      Add the ${n} observations:
+      <br>
+      ${signedSum(values)} = ${total}.
+      <br>
+      Mean = ${total} ÷ ${n}
+      = <strong>${answer}</strong>.
+    `;
+
+    meta = { values, total, count: n };
+  }
+
+  /* -----------------------------------------
+     CASE 02: FRACTIONAL MEAN
+  ----------------------------------------- */
+
+  else if (kind === 'fraction') {
+    const n = pick([3, 4]);
+
+    const den = pick([2, 3, 4, 6]);
+
+    const nums = sample(1, 3 * den, n);
+    const values = nums.map(x => fraction(x, den));
+
+    const total = sum(nums);
+
+    answer = fraction(total, den * n);
+
+    prompt =
+      `Find the mean of: ${values.join(', ')}.`;
+
+    solution = `
+      Express the values using denominator ${den}.
+      <br>
+      Sum of numerators =
+      ${nums.join(' + ')} = ${total}.
+      <br>
+      Total = ${fraction(total, den)}.
+      <br>
+      Divide by ${n} observations.
+      <br>
+      Mean = <strong>${answer}</strong>.
+    `;
+
+    meta = { values, total, den, count: n };
+  }
+
+  /* -----------------------------------------
+     CASE 03: MISSING OBSERVATION
+  ----------------------------------------- */
+
+  else if (kind === 'missing') {
+    const n = rand(4, 7);
+    const mean = rand(12, 35);
+    const x = rand(5, 45);
+
+    const otherValues = sample(5, 35, n - 2);
+
+    const last =
+      n * mean - x - sum(otherValues);
+
+    const values = shuffle([
+      ...otherValues,
+      last,
+      'x'
+    ]);
+
+    answer = String(x);
+
+    prompt =
+      `The mean of ${values.join(', ')} is ${mean}. Find x.`;
+
+    solution = `
+      Required sum = ${n} × ${mean}
+      = ${n * mean}.
+      <br>
+      Sum of known values =
+      ${n * mean - x}.
+      <br>
+      x = ${n * mean} − (${n * mean - x})
+      = <strong>${x}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 04: ALGEBRAIC EXPRESSIONS
+  ----------------------------------------- */
+
+  else if (kind === 'expressions') {
+    const a = rand(2, 5);
+    const b = rand(6, 9);
+    const x = rand(3, 18);
+
+    const coefficient = 1 + a + b;
+
+    const mean = fraction(coefficient * x, 3);
+
+    answer = String(x);
+
+    prompt =
+      `The mean of x, ${a}x, and ${b}x is ${mean}. Find x.`;
+
+    solution = `
+      Mean = (x + ${a}x + ${b}x)/3.
+      <br>
+      ${coefficient}x/3 = ${mean}.
+      <br>
+      Multiply both sides by 3,
+      then divide by ${coefficient}.
+      <br>
+      x = <strong>${x}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 05: CONSECUTIVE INTEGERS
+  ----------------------------------------- */
+
+  else if (kind === 'consecutive') {
+    const n = pick([3, 5, 7]);
+    const middle = rand(15, 60);
+
+    const step = pick(
+      settings.difficulty === 'Beginner'
+        ? [1]
+        : [1, 1, 2, 3]
+    );
+
+    const distance = (n - 1) / 2;
+
+    const which = pick(['smallest', 'largest']);
+
+    const description =
+      step === 1
+        ? 'consecutive integers'
+        : step === 2
+          ? 'consecutive even integers'
+          : 'integers increasing by 3';
+
+    const center =
+      step === 2
+        ? middle + (middle % 2)
+        : middle;
+
+    const finalResult =
+      center +
+      (which === 'largest' ? 1 : -1) *
+      distance * step;
+
+    answer = String(finalResult);
+
+    prompt =
+      `The mean of ${n} ${description} is ${center}. Find the ${which} integer.`;
+
+    solution = `
+      For an odd number of equally spaced values,
+      the mean is the middle term.
+      <br>
+      Middle term = ${center}.
+      <br>
+      Move ${distance} positions,
+      each ${step} apart.
+      <br>
+      Answer = <strong>${finalResult}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 06: ADDED/REMOVED OBSERVATION
+  ----------------------------------------- */
+
+  else if (kind === 'change') {
+    const n = rand(4, 9);
+    const mean = rand(15, 40);
+
+    const number = rand(5, 65);
+    const added = pick([true, false]);
+
+    const oldTotal = n * mean;
+
+    const newCount = n + (added ? 1 : -1);
+
+    const newTotal =
+      oldTotal + (added ? number : -number);
+
+    const newMean =
+      fraction(newTotal, newCount);
+
+    answer = String(number);
+
+    prompt = added
+      ? `The mean of ${n} numbers is ${mean}. When one number is added, the mean becomes ${newMean}. What number was added?`
+      : `The mean of ${n} numbers is ${mean}. After removing one number, the mean becomes ${newMean}. What number was removed?`;
+
+    solution = `
+      Original sum = ${n} × ${mean}
+      = ${oldTotal}.
+      <br>
+      Updated sum = ${newCount} ×
+      (${newMean}) = ${newTotal}.
+      <br>
+      Compare the two sums.
+      <br>
+      ${added ? 'Added' : 'Removed'} number =
+      <strong>${number}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 07: WORD PROBLEM
+  ----------------------------------------- */
+
+  else if (kind === 'word') {
+    const context = pick([
+      'practice sets',
+      'daily sales',
+      'quiz scores',
+      'pages read'
+    ]);
+
+    const n = rand(4, 7);
+    const values = sample(12, 38, n);
+    const total = sum(values);
+
+    answer = fraction(total, n);
+
+    const intro =
+      context === 'practice sets'
+        ? `A student scored ${values.join(', ')} points in ${n} practice sets.`
+        : context === 'daily sales'
+          ? `A shop sold ${values.join(', ')} items over ${n} days.`
+          : context === 'quiz scores'
+            ? `A learner obtained ${values.join(', ')} points on ${n} quizzes.`
+            : `A reader finished ${values.join(', ')} pages over ${n} days.`;
+
+    prompt =
+      `${intro} Find the average per ${context === 'quiz scores' ? 'quiz' : context === 'practice sets' ? 'practice set' : 'day'}.`;
+
+    solution = `
+      Total = ${total}.
+      <br>
+      Number of observations = ${n}.
+      <br>
+      Average = ${total}/${n}
+      = <strong>${answer}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 08: DIRECT WEIGHTED MEAN
+  ----------------------------------------- */
+
+  else if (kind === 'weightedDirect') {
+    const weights = pick([
+      [20, 30, 50],
+      [25, 25, 50],
+      [10, 40, 50],
+      [30, 30, 40],
+      [15, 35, 50]
+    ]);
+
+    const scores = sample(6, 10, 3)
+      .map(x => x * 10);
+
+    const weightedTotal = weights.reduce(
+      (total, w, i) =>
+        total + w * scores[i],
+      0
+    );
+
+    answer = fraction(weightedTotal, 100);
+
+    prompt =
+      `A course grade consists of Quizzes (${weights[0]}%), Projects (${weights[1]}%), and Exams (${weights[2]}%). The scores are ${scores[0]}, ${scores[1]}, and ${scores[2]}, respectively. Find the weighted mean.`;
+
+    solution = `
+      Multiply each score by its weight.
+      <br>
+      Weighted sum =
+      ${weights[0]}(${scores[0]}) +
+      ${weights[1]}(${scores[1]}) +
+      ${weights[2]}(${scores[2]})
+      = ${weightedTotal}.
+      <br>
+      Divide by 100.
+      <br>
+      Weighted mean =
+      <strong>${answer}</strong>.
+    `;
+
+    meta = { weights, scores };
+  }
+
+  /* -----------------------------------------
+     CASE 09: UNKNOWN WEIGHTED SCORE
+  ----------------------------------------- */
+
+  else if (kind === 'weightedUnknown') {
+    const weights = pick([
+      [20, 30, 50],
+      [25, 25, 50],
+      [30, 20, 50],
+      [20, 40, 40]
+    ]);
+
+    const scores = [
+      rand(6, 9) * 10,
+      rand(6, 9) * 10,
+      rand(6, 10) * 10
+    ];
+
+    const targetNumerator = weights.reduce(
+      (total, w, i) => total + w * scores[i],
+      0
+    );
+
+    const target = fraction(
+      targetNumerator,
+      100
+    );
+
+    answer = String(scores[2]);
+
+    prompt =
+      `Quizzes are worth ${weights[0]}%, Projects ${weights[1]}%, and the Final Exam ${weights[2]}%. A student scores ${scores[0]} in Quizzes and ${scores[1]} in Projects. What final exam score is needed for a weighted average of ${target}?`;
+
+    solution = `
+      Let x be the final exam score.
+      <br>
+      ${weights[0]}(${scores[0]}) +
+      ${weights[1]}(${scores[1]}) +
+      ${weights[2]}x =
+      100(${target}).
+      <br>
+      Solve for x.
+      <br>
+      x = <strong>${scores[2]}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 10: FREQUENCY-WEIGHTED MEAN
+  ----------------------------------------- */
+
+  else if (kind === 'frequencyWeighted') {
+    const values = [
+      rand(5, 12),
+      rand(13, 20),
+      rand(21, 30)
+    ];
+
+    const frequencies = [
+      rand(2, 5),
+      rand(2, 5),
+      rand(2, 5)
+    ];
+
+    const totalFrequency = sum(frequencies);
+
+    const weightedTotal = values.reduce(
+      (total, x, i) =>
+        total + x * frequencies[i],
+      0
+    );
+
+    answer = fraction(
+      weightedTotal,
+      totalFrequency
+    );
+
+    prompt =
+      `A data set contains ${frequencies[0]} occurrences of ${values[0]}, ${frequencies[1]} occurrences of ${values[1]}, and ${frequencies[2]} occurrences of ${values[2]}. Find the mean.`;
+
+    solution = `
+      Multiply each value by its frequency.
+      <br>
+      Weighted sum =
+      ${values[0]}(${frequencies[0]}) +
+      ${values[1]}(${frequencies[1]}) +
+      ${values[2]}(${frequencies[2]})
+      = ${weightedTotal}.
+      <br>
+      Total frequency = ${totalFrequency}.
+      <br>
+      Mean = ${weightedTotal}/${totalFrequency}
+      = <strong>${answer}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 11: COMBINED MEAN
+  ----------------------------------------- */
+
+  else if (kind === 'combined') {
+    const n1 = rand(4, 12);
+    const n2 = rand(4, 12);
+
+    const mean1 = rand(15, 45);
+    const mean2 = rand(15, 45);
+
+    const total =
+      n1 * mean1 + n2 * mean2;
+
+    answer = fraction(total, n1 + n2);
+
+    prompt =
+      `Group A has ${n1} students with an average score of ${mean1}. Group B has ${n2} students with an average score of ${mean2}. Find the combined average score.`;
+
+    solution = `
+      Group A total = ${n1} × ${mean1}
+      = ${n1 * mean1}.
+      <br>
+      Group B total = ${n2} × ${mean2}
+      = ${n2 * mean2}.
+      <br>
+      Combined sum = ${total}.
+      <br>
+      Total students = ${n1 + n2}.
+      <br>
+      Combined mean =
+      <strong>${answer}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 12: TRANSFORMATION OF MEAN
+  ----------------------------------------- */
+
+  else if (kind === 'transformation') {
+    const mean = rand(10, 45);
+    const operation = pick([
+      'add',
+      'subtract',
+      'multiply'
+    ]);
+
+    const k = rand(2, 8);
+
+    const result =
+      operation === 'add'
+        ? mean + k
+        : operation === 'subtract'
+          ? mean - k
+          : mean * k;
+
+    answer = String(result);
+
+    const action =
+      operation === 'add'
+        ? `increased by ${k}`
+        : operation === 'subtract'
+          ? `decreased by ${k}`
+          : `multiplied by ${k}`;
+
+    prompt =
+      `The mean of a data set is ${mean}. If every observation is ${action}, what is the new mean?`;
+
+    solution = `
+      Applying the same linear operation
+      to every observation changes the mean
+      by that operation.
+      <br>
+      New mean =
+      <strong>${result}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 13: TARGET AVERAGE
+  ----------------------------------------- */
+
+  else if (kind === 'target') {
+    const n = rand(3, 5);
+    const target = rand(70, 90);
+
+    const needed = rand(65, 100);
+
+    const requiredPrevious =
+      (n + 1) * target - needed;
+
+    const base = Math.floor(
+      requiredPrevious / n
+    );
+
+    const scores = Array(n).fill(base);
+
+    let extra = requiredPrevious - base * n;
+
+    for (let i = 0; i < extra; i++) {
+      scores[i]++;
+    }
+
+    const arranged = shuffle(scores);
+
+    answer = String(needed);
+
+    prompt =
+      `A student scores ${arranged.join(', ')} on ${n} tests. What minimum integer score is needed on the next test to obtain an average of at least ${target}?`;
+
+    solution = `
+      Target total =
+      ${n + 1} × ${target}
+      = ${(n + 1) * target}.
+      <br>
+      Current sum = ${requiredPrevious}.
+      <br>
+      Required next score =
+      ${(n + 1) * target} − ${requiredPrevious}.
+      <br>
+      Answer = <strong>${needed}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 14: INCORRECTLY RECORDED DATA
+  ----------------------------------------- */
+
+  else if (kind === 'correction') {
+    const n = rand(5, 12);
+
+    const incorrectMean = rand(15, 45);
+
+    const recorded = rand(5, 30);
+    const actual = recorded + rand(5, 25);
+
+    const incorrectTotal =
+      n * incorrectMean;
+
+    const correctTotal =
+      incorrectTotal - recorded + actual;
+
+    answer = fraction(correctTotal, n);
+
+    prompt =
+      `The mean of ${n} observations was calculated as ${incorrectMean}. One value was mistakenly recorded as ${recorded} instead of ${actual}. Find the correct mean.`;
+
+    solution = `
+      Incorrect total =
+      ${n} × ${incorrectMean}
+      = ${incorrectTotal}.
+      <br>
+      Correct the total:
+      ${incorrectTotal} − ${recorded}
+      + ${actual} = ${correctTotal}.
+      <br>
+      Correct mean =
+      <strong>${answer}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 15: MULTIPLE ADDED/REMOVED VALUES
+  ----------------------------------------- */
+
+  else if (kind === 'multipleChange') {
+    const n = rand(5, 9);
+    const mean = rand(15, 40);
+
+    const a = rand(5, 45);
+    const b = rand(5, 45);
+
+    const added = pick([true, false]);
+
+    const originalTotal = n * mean;
+
+    const newCount =
+      n + (added ? 2 : -2);
+
+    const newTotal =
+      originalTotal +
+      (added ? a + b : -(a + b));
+
+    answer = fraction(newTotal, newCount);
+
+    prompt = added
+      ? `The mean of ${n} numbers is ${mean}. Two more numbers, ${a} and ${b}, are added. Find the new mean.`
+      : `The mean of ${n} numbers is ${mean}. The numbers ${a} and ${b} are removed. Find the new mean.`;
+
+    solution = `
+      Original total =
+      ${n} × ${mean}
+      = ${originalTotal}.
+      <br>
+      Updated total = ${newTotal}.
+      <br>
+      Updated count = ${newCount}.
+      <br>
+      New mean =
+      <strong>${answer}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 16: REPEATED VARIABLE
+  ----------------------------------------- */
+
+  else if (kind === 'repeated') {
+    const x = rand(5, 25);
+    const n = rand(5, 7);
+
+    const repeats = rand(2, n - 2);
+
+    const known = sample(5, 35, n - repeats);
+
+    const total =
+      repeats * x + sum(known);
+
+    const mean = fraction(total, n);
+
+    answer = String(x);
+
+    const values = shuffle([
+      ...Array(repeats).fill('x'),
+      ...known
+    ]);
+
+    prompt =
+      `The mean of ${values.join(', ')} is ${mean}. Find x.`;
+
+    solution = `
+      Total sum = ${n}(${mean})
+      = ${total}.
+      <br>
+      Sum of known values =
+      ${sum(known)}.
+      <br>
+      ${repeats}x =
+      ${total} − ${sum(known)}
+      = ${repeats * x}.
+      <br>
+      x = <strong>${x}</strong>.
+    `;
+  }
+
+  /* -----------------------------------------
+     CASE 17: TWO UNKNOWNS — ADVANCED
+  ----------------------------------------- */
+
+  else if (kind === 'paired') {
+    const mean = rand(12, 35);
+
+    const a = rand(5, 25);
+    const b = rand(5, 25);
+
+    const remaining =
+      4 * mean - a - b;
+
+    const y = Math.ceil(remaining / 2);
+
+    answer = String(y);
+
+    prompt =
+      `The mean of ${a}, ${b}, x, and y is ${mean}. If x and y are integers and x ≤ y, what is the minimum possible value of y?`;
+
+    solution = `
+      x + y =
+      4(${mean}) − ${a} − ${b}
+      = ${remaining}.
+      <br>
+      Since x ≤ y,
+      2y ≥ ${remaining}.
+      <br>
+      Minimum integer y =
+      <strong>${y}</strong>.
+    `;
+  }
+
+  return {
+    skill: 'Mean',
+    type: 'Mean reasoning',
+    kind,
+    prompt,
+    answer,
+    solution,
+    meta
+  };
+}
+
+/* =====================================================
+   07. MEDIAN GENERATOR — 13 VARIATIONS
+===================================================== */
+
+function medianOf(values) {
+  const a = [...values].sort((x, y) => x - y);
+  const n = a.length;
+
+  if (n % 2) {
+    return a[(n - 1) / 2];
+  }
+
+  return (a[n / 2 - 1] + a[n / 2]) / 2;
+}
+
+function exactNumber(value) {
+  for (const d of [1, 2, 3, 4, 6, 8, 12, 24]) {
+    const n = Math.round(value * d);
+
+    if (Math.abs(value - n / d) < 1e-9) {
+      return fraction(n, d);
+    }
+  }
+
+  return String(value);
+}
+
+function ascending(values) {
+  return [...values].sort((a, b) => a - b).join(', ');
+}
+
+
+/* =========================================
+   ORDINAL NUMBER FORMATTER
+   1st, 2nd, 3rd, 4th, etc.
+========================================= */
+
+function ordinal(n) {
+  const lastTwo = n % 100;
+
+  if (lastTwo >= 11 && lastTwo <= 13) {
+    return `${n}th`;
+  }
+
+  switch (n % 10) {
+    case 1:
+      return `${n}st`;
+
+    case 2:
+      return `${n}nd`;
+
+    case 3:
+      return `${n}rd`;
+
+    default:
+      return `${n}th`;
+  }
+}
+
+
+
+/* =====================================================
+   HULAGPOS — IMPROVED MEDIAN QUESTION GENERATOR
+
+   13 VARIATIONS
+
+   01. Odd data
+   02. Even data
+   03. Unsorted data
+   04. Missing observation
+   05. Target median
+   06. Fractional median
+   07. Algebraic median
+   08. Adding an observation
+   09. Removing an observation
+   10. Transformation
+   11. Frequency distribution
+   12. Outlier modification
+   13. Comparing medians
+
+   ALL SOLUTIONS:
+   Formula / Position
+   Substitution
+   Computation
+   Final Answer
+===================================================== */
+
+function medianQuestion() {
+
+  const kind = chooseMedianType();
+
+  let prompt = '';
+  let answer = '';
+  let solution = '';
+  let values = null;
+  let meta = {};
+
+  /* =========================================
+     HELPER: FINAL ANSWER
+  ========================================= */
+
+  function finalAnswer(value) {
+    return `
+      <br>
+      <strong>FINAL ANSWER: ${value}</strong>
+    `;
+  }
+
+  /* =========================================
+     HELPER: SHOW MEDIAN COMPUTATION
+
+     Accepts a numerical array.
+     Explains odd and even cases separately.
+  ========================================= */
+
+  function explainMedian(data) {
+
+    const ordered = [...data].sort(
+      (a, b) => a - b
+    );
+
+    const n = ordered.length;
+
+    let steps = `
+      <strong>Step 1. Arrange the observations.</strong>
+      <br>
+      Ascending order:
+      ${ordered.join(', ')}
+      <br><br>
+
+      <strong>Step 2. Determine the number of observations.</strong>
+      <br>
+      N = ${n}.
+      <br><br>
+    `;
+
+    if (n % 2 === 1) {
+
+      const position = (n + 1) / 2;
+      const median = ordered[position - 1];
+
+      steps += `
+        <strong>Step 3. Locate the median position.</strong>
+        <br>
+        Since N is odd:
+        <br>
+        P = (N + 1)/2
+        <br>
+        P = (${n} + 1)/2
+        <br>
+        P = ${position}.
+        <br><br>
+
+        <strong>Step 4. Identify the middle value.</strong>
+        <br>
+        The ${position}${
+          position % 10 === 1 && position !== 11
+            ? 'st'
+            : position % 10 === 2 && position !== 12
+              ? 'nd'
+              : position % 10 === 3 && position !== 13
+                ? 'rd'
+                : 'th'
+        } observation is ${median}.
+        <br>
+
+        Median = ${median}.
+      `;
+
+      return steps + finalAnswer(
+        exactNumber(median)
+      );
+
+    } else {
+
+      const p1 = n / 2;
+      const p2 = p1 + 1;
+
+      const a = ordered[p1 - 1];
+      const b = ordered[p2 - 1];
+
+      const median = (a + b) / 2;
+
+      steps += `
+        <strong>Step 3. Locate the two middle positions.</strong>
+        <br>
+        Since N is even:
+        <br>
+
+P₁ = N/2 = ${n}/2 = ${p1}.
+<br>
+
+P₂ = P₁ + 1 = ${p1} + 1 = ${p2}.
+
+
+        <br><br>
+
+        <strong>Step 4. Find the average of the two middle values.</strong>
+        <br>
+
+${ordinal(p1)} observation = ${a}.
+<br>
+${ordinal(p2)} observation = ${b}.
+
+        <br><br>
+
+
+Median = (${a} + ${b})/2
+<br>
+= ${a + b}/2
+<br>
+= ${exactNumber(median)}
+
+      `;
+
+      return steps + finalAnswer(
+        exactNumber(median)
+      );
+    }
+  }
+
+  /* =========================================
+     CASES 01–03
+     ODD / EVEN / UNSORTED DATA
+  ========================================= */
+
+  if (
+    kind === 'odd' ||
+    kind === 'even' ||
+    kind === 'unsorted'
+  ) {
+
+    const n =
+      kind === 'odd'
+        ? pick([5, 7, 9])
+        : kind === 'even'
+          ? pick([4, 6, 8])
+          : pick([5, 6, 7, 8]);
+
+    values = sample(
+      1,
+      settings.difficulty === 'Advanced'
+        ? 75
+        : 45,
+      n
+    );
+
+    answer = exactNumber(
+      medianOf(values)
+    );
+
+    prompt =
+      `Find the median of: ${
+        shuffle(values).join(', ')
+      }.`;
+
+    solution = explainMedian(values);
+
+  }
+
+  /* =========================================
+     CASES 04–05
+     MISSING OBSERVATION / TARGET MEDIAN
+  ========================================= */
+
+  else if (
+    kind === 'missing' ||
+    kind === 'target'
+  ) {
+
+    const m = rand(11, 38);
+
+    const left = sample(1, m - 1, 2);
+
+    const right = sample(
+      m + 1,
+      m + 20,
+      2
+    );
+
+    const lower = Math.max(...left);
+    const upper = Math.min(...right);
+
+    values = [
+      ...left,
+      m,
+      ...right
+    ];
+
+    answer = String(m);
+
+    const entries = shuffle([
+      ...left,
+      'x',
+      ...right
+    ]);
+
+    prompt =
+      kind === 'missing'
+        ? `The median of ${
+            entries.join(', ')
+          } is ${m}. Given that x is between ${lower} and ${upper}, find x.`
+        : `Five observations are ${
+            entries.join(', ')
+          }. Find x if the median must be ${m} and ${lower} < x < ${upper}.`;
+
+    solution = `
+      <strong>Step 1. Determine the number of observations.</strong>
+      <br>
+      N = 5.
+      <br><br>
+
+      <strong>Step 2. Determine the median position.</strong>
+      <br>
+      P = (N + 1)/2
+      <br>
+      P = (5 + 1)/2
+      <br>
+      P = 3.
+      <br><br>
+
+      <strong>Step 3. Arrange the known observations.</strong>
+      <br>
+      Known values in ascending order:
+      ${
+        [...left, ...right]
+          .sort((a, b) => a - b)
+          .join(', ')
+      }.
+      <br><br>
+
+      The conditions require:
+      <br>
+      ${lower} &lt; x &lt; ${upper}.
+      <br>
+      Therefore, x occupies the third position.
+      <br><br>
+
+      <strong>Step 4. Use the given median.</strong>
+      <br>
+      The third observation must equal ${m}.
+      <br>
+      Thus, x = ${m}.
+      ${finalAnswer(m)}
+    `;
+
+  }
+
+  /* =========================================
+     CASE 06
+     FRACTIONAL MEDIAN
+  ========================================= */
+
+  else if (kind === 'fractional') {
+
+    const d = pick([2, 3, 4, 6]);
+
+    const nums = shuffle(
+      [1, 2, 3, 5, 7, 9].map(
+        x => x + rand(0, 2)
+      )
+    ).slice(
+      0,
+      pick([4, 5])
+    );
+
+    values = nums.map(n => n / d);
+
+    const ordered = [...nums].sort(
+      (a, b) => a - b
+    );
+
+    const n = ordered.length;
+
+    const fractions = ordered.map(
+      numerator => fraction(numerator, d)
+    );
+
+    answer = exactNumber(
+      medianOf(values)
+    );
+
+    prompt =
+      `Find the median of: ${
+        shuffle(
+          nums.map(numerator =>
+            fraction(numerator, d)
+          )
+        ).join(', ')
+      }.`;
+
+    solution = `
+      <strong>Step 1. Arrange the fractions in ascending order.</strong>
+      <br>
+      ${fractions.join(', ')}.
+      <br><br>
+
+      <strong>Step 2. Determine the number of observations.</strong>
+      <br>
+      N = ${n}.
+      <br><br>
+    `;
+
+    if (n % 2 === 1) {
+
+      const position = (n + 1) / 2;
+
+      const middle = fractions[position - 1];
+
+      solution += `
+        <strong>Step 3. Locate the median position.</strong>
+        <br>
+        P = (N + 1)/2
+        <br>
+        P = (${n} + 1)/2
+        <br>
+        P = ${position}.
+        <br><br>
+
+        <strong>Step 4. Identify the middle fraction.</strong>
+        <br>
+        The observation at position ${position}
+        is ${middle}.
+        <br>
+        Median = ${answer}.
+        ${finalAnswer(answer)}
+      `;
+
+    } else {
+
+      const p1 = n / 2;
+      const p2 = p1 + 1;
+
+      const a = ordered[p1 - 1];
+      const b = ordered[p2 - 1];
+
+      solution += `
+        <strong>Step 3. Locate the middle positions.</strong>
+        <br>
+ 
+P₁ = N/2 = ${n}/2 = ${p1}.
+<br>
+P₂ = P₁ + 1 = ${p1} + 1 = ${p2}.
+
+        <br><br>
+
+
+<strong>Step 4. Average the two middle fractions.</strong>
+<br>
+Median = (${fraction(a, d)} + ${fraction(b, d)}) ÷ 2
+<br>
+= (${fraction(a + b, d)}) ÷ 2
+<br>
+= ${answer}
+${finalAnswer(answer)}
+
+      `;
+    }
+
+  }
+
+  /* =========================================
+     CASE 07
+     ALGEBRAIC MEDIAN
+  ========================================= */
+
+  else if (kind === 'algebraic') {
+
+    const x = rand(3, 24);
+    const step = rand(2, 5);
+
+    const center = x + 2 * step;
+
+    answer = String(x);
+
+    prompt =
+      `Five values in increasing order are x, x + ${step}, x + ${2 * step}, x + ${3 * step}, and x + ${4 * step}. If their median is ${center}, find x.`;
+
+    solution = `
+      <strong>Step 1. Identify the median position.</strong>
+      <br>
+      N = 5.
+      <br>
+      P = (N + 1)/2 = 3.
+      <br><br>
+
+      <strong>Step 2. Identify the middle expression.</strong>
+      <br>
+      The third expression is x + ${2 * step}.
+      <br><br>
+
+      <strong>Step 3. Equate it to the given median.</strong>
+      <br>
+      x + ${2 * step} = ${center}.
+      <br><br>
+
+      <strong>Step 4. Solve for x.</strong>
+      <br>
+      x = ${center} − ${2 * step}
+      <br>
+      x = ${x}.
+      ${finalAnswer(x)}
+    `;
+
+  }
+
+  /* =========================================
+     CASES 08–09
+     ADDING OR REMOVING AN OBSERVATION
+  ========================================= */
+
+  else if (
+    kind === 'add' ||
+    kind === 'remove'
+  ) {
+
+    const data = [
+      rand(1, 5),
+      rand(6, 10),
+      rand(11, 15),
+      rand(16, 20),
+      rand(21, 26)
+    ];
+
+    let changed;
+
+    if (kind === 'add') {
+
+      const extra = rand(7, 22);
+
+      changed = [...data, extra];
+
+      prompt =
+        `The data set is ${data.join(', ')}. If ${extra} is added, what is the new median?`;
+
+    } else {
+
+      const removed = pick(data);
+
+      changed = [...data];
+
+      changed.splice(
+        changed.indexOf(removed),
+        1
+      );
+
+      prompt =
+        `The data set is ${data.join(', ')}. If one occurrence of ${removed} is removed, what is the new median?`;
+
+    }
+
+    values = changed;
+
+    answer = exactNumber(
+      medianOf(changed)
+    );
+
+    solution = `
+     
+<strong>Updated data set</strong>
+
+      <br>
+      After ${
+        kind === 'add'
+          ? 'adding the observation'
+          : 'removing the specified observation'
+      }, the observations are:
+      <br>
+      ${changed.join(', ')}.
+      <br><br>
+
+      ${explainMedian(changed)}
+    `;
+
+  }
+
+  /* =========================================
+     CASE 10
+     MEDIAN TRANSFORMATION
+  ========================================= */
+
+  else if (kind === 'transform') {
+
+    const old = rand(8, 32);
+    const k = rand(2, 8);
+
+    const operation = pick([
+      'increased',
+      'decreased',
+      'multiplied'
+    ]);
+
+    const result =
+      operation === 'increased'
+        ? old + k
+        : operation === 'decreased'
+          ? old - k
+          : old * k;
+
+    answer = String(result);
+
+    prompt =
+      `The median of a data set is ${old}. Every observation is ${
+        operation === 'multiplied'
+          ? 'multiplied by'
+          : operation + ' by'
+      } ${k}. Find the new median.`;
+
+    const computation =
+      operation === 'increased'
+        ? `${old} + ${k}`
+        : operation === 'decreased'
+          ? `${old} − ${k}`
+          : `${old} × ${k}`;
+
+    solution = `
+      <strong>Step 1. Identify the original median.</strong>
+      <br>
+      Original median = ${old}.
+      <br><br>
+
+      <strong>Step 2. Identify the transformation.</strong>
+      <br>
+      Every observation is ${
+        operation === 'multiplied'
+          ? 'multiplied by'
+          : operation + ' by'
+      } ${k}.
+      <br><br>
+
+      <strong>Step 3. Apply the transformation to the median.</strong>
+      <br>
+      Because the transformation preserves the
+      ordering of observations, the median
+      undergoes the same operation.
+      <br><br>
+
+      New median = ${computation}
+      <br>
+      New median = ${result}.
+      ${finalAnswer(result)}
+    `;
+
+  }
+
+  /* =========================================
+     CASE 11
+     FREQUENCY DISTRIBUTION
+
+     Explicitly shows:
+     - Total frequency
+     - Cumulative frequency
+     - Position ranges
+     - Middle observation(s)
+  ========================================= */
+
+  else if (kind === 'frequency') {
+
+    const v = [
+      rand(2, 9),
+      rand(12, 19),
+      rand(23, 31)
+    ];
+
+    const f = [
+      rand(2, 4),
+      rand(2, 5),
+      rand(2, 4)
+    ];
+
+    values = v.flatMap(
+      (x, i) => Array(f[i]).fill(x)
+    );
+
+    const N = sum(f);
+
+    answer = exactNumber(
+      medianOf(values)
+    );
+
+    prompt =
+      `A data set has ${f[0]} occurrences of ${v[0]}, ${f[1]} occurrences of ${v[1]}, and ${f[2]} occurrences of ${v[2]}. Find its median.`;
+
+    let cumulative = 0;
+
+    const ranges = v.map((value, i) => {
+
+      const start = cumulative + 1;
+
+      cumulative += f[i];
+
+      return {
+        value,
+        frequency: f[i],
+        start,
+        end: cumulative
+      };
+
+    });
+
+    const frequencyRows = ranges.map(r => `
+      Value ${r.value}:
+      frequency ${r.frequency};
+      positions ${r.start}–${r.end};
+      cumulative frequency ${r.end}.
+      <br>
+    `).join('');
+
+    function valueAt(position) {
+
+      return ranges.find(
+        r =>
+          position >= r.start &&
+          position <= r.end
+      ).value;
+
+    }
+
+    solution = `
+      <strong>Step 1. Determine the total frequency.</strong>
+      <br>
+      N = ${f.join(' + ')}
+      <br>
+      N = ${N}.
+      <br><br>
+
+      <strong>Step 2. Determine the positions of each value.</strong>
+      <br>
+      ${frequencyRows}
+      <br>
+    `;
+
+    if (N % 2 === 1) {
+
+      const p = (N + 1) / 2;
+
+      const median = valueAt(p);
+
+      const row = ranges.find(
+        r => r.value === median
+      );
+
+      solution += `
+        <strong>Step 3. Locate the median position.</strong>
+        <br>
+        Since N is odd:
+        <br>
+        P = (N + 1)/2
+        <br>
+        P = (${N} + 1)/2
+        <br>
+        P = ${p}.
+        <br><br>
+
+        <strong>Step 4. Identify the value at that position.</strong>
+        <br>
+        Value ${median} occupies positions
+        ${row.start}–${row.end}.
+        <br>
+        Position ${p} lies within this range.
+        <br>
+        Median = ${median}.
+        ${finalAnswer(answer)}
+      `;
+
+    } else {
+
+      const p1 = N / 2;
+      const p2 = p1 + 1;
+
+      const a = valueAt(p1);
+      const b = valueAt(p2);
+
+      const median = (a + b) / 2;
+
+      solution += `
+        <strong>Step 3. Locate the two middle positions.</strong>
+        <br>
+        Since N is even:
+        <br>
+ 
+P₁ = N/2 = ${N}/2 = ${p1}.
+<br>
+P₂ = P₁ + 1 = ${p1} + 1 = ${p2}.
+
+        <br><br>
+
+        <strong>Step 4. Identify the middle observations.</strong>
+        <br>
+        Position ${p1} contains ${a}.
+        <br>
+        Position ${p2} contains ${b}.
+        <br><br>
+
+        <strong>Step 5. Compute the median.</strong>
+        <br>
+
+Median = (${a} + ${b})/2
+<br>
+= ${a + b}/2
+<br>
+= ${exactNumber(median)}
+
+        ${finalAnswer(answer)}
+      `;
+
+    }
+
+    meta = {
+      values: v,
+      frequencies: f,
+      cumulativeFrequencies: ranges.map(
+        r => r.end
+      ),
+      totalFrequency: N
+    };
+
+  }
+
+  /* =========================================
+     CASE 12
+     OUTLIER MODIFICATION
+  ========================================= */
+
+  else if (kind === 'outlier') {
+
+    const middle = rand(11, 29);
+
+    const increase = rand(30, 150);
+
+    const data = [
+      middle - 8,
+      middle - 3,
+      middle,
+      middle + 5,
+      middle + 9
+    ];
+
+    const newData = [...data];
+
+    newData[4] += increase;
+
+    values = data;
+
+    answer = String(middle);
+
+    prompt =
+      `The data are ${data.join(', ')}. If the largest observation is increased by ${increase}, what is the new median?`;
+
+    solution = `
+      <strong>Step 1. Identify the original median position.</strong>
+      <br>
+      N = 5.
+      <br>
+      P = (N + 1)/2
+      <br>
+      P = 3.
+      <br><br>
+
+      <strong>Step 2. Update the largest observation.</strong>
+      <br>
+      Original largest value = ${data[4]}.
+      <br>
+      Updated largest value =
+      ${data[4]} + ${increase}
+      = ${newData[4]}.
+      <br><br>
+
+      <strong>Step 3. Arrange the new data.</strong>
+      <br>
+      ${newData.join(', ')}.
+      <br><br>
+
+      <strong>Step 4. Identify the third observation.</strong>
+      <br>
+      The third observation remains ${middle}.
+      <br><br>
+
+      Increasing the largest value does not
+      change the middle position.
+      <br>
+      Median = ${middle}.
+      ${finalAnswer(middle)}
+    `;
+
+  }
+
+  /* =========================================
+     CASE 13
+     COMPARING TWO MEDIANS
+  ========================================= */
+
+  else if (kind === 'compare') {
+
+    const a = [
+      3, 7, 11, 15, 19
+    ].map(x => x + rand(0, 4));
+
+    const shift = rand(2, 9);
+
+    const b = a.map(
+      x => x + shift
+    );
+
+    const medianA = medianOf(a);
+    const medianB = medianOf(b);
+
+    answer = String(shift);
+
+    prompt =
+      `Data set A is ${shuffle(a).join(', ')}. Data set B is formed by increasing every value in A by the same amount. If B's median is ${medianB}, by how much is its median greater than A's?`;
+
+    solution = `
+      <strong>Step 1. Arrange Data Set A.</strong>
+      <br>
+      ${ascending(a)}.
+      <br><br>
+
+      <strong>Step 2. Determine the median of A.</strong>
+      <br>
+      N = 5.
+      <br>
+      P = (5 + 1)/2 = 3.
+      <br>
+      Median A = ${medianA}.
+      <br><br>
+
+      <strong>Step 3. Identify the median of B.</strong>
+      <br>
+      Median B = ${medianB}.
+      <br><br>
+
+      <strong>Step 4. Calculate the difference.</strong>
+      <br>
+      Difference = Median B − Median A
+      <br>
+      Difference = ${medianB} − ${medianA}
+      <br>
+      Difference = ${shift}.
+      ${finalAnswer(shift)}
+    `;
+
+  }
+
+  /* =========================================
+     RETURN THE GENERATED QUESTION
+
+     Preserve these object properties.
+     The game engine depends on them.
+  ========================================= */
+
+  return {
+    skill: 'Median',
+    type: 'Data interpretation',
+    kind,
+    prompt,
+    answer,
+    solution,
+    values,
+    meta
+  };
+
+}
+
+/* =====================================================
+   08. MODE GENERATOR — 10 VARIATIONS
+===================================================== */
+
+function modeOf(values) {
+  const counts = new Map();
+
+  values.forEach(v => {
+    counts.set(
+      v,
+      (counts.get(v) || 0) + 1
+    );
+  });
+
+  const top = Math.max(...counts.values());
+
+  // CET convention:
+  // Equal frequencies for all values = No mode.
+
+  if (
+    [...counts.values()].every(f => f === top)
+  ) {
+    return [];
+  }
+
+  return [...counts.keys()]
+    .filter(v => counts.get(v) === top)
+    .sort((a, b) => a - b);
+}
+
+function frequencyExplanation(values) {
+  const counts = new Map();
+
+  values.forEach(v => {
+    counts.set(v, (counts.get(v) || 0) + 1);
+  });
+
+  return [...counts.entries()]
+    .sort((a, b) => a[0] - b[0])
+    .map(([v, f]) =>
+      `${v} appears ${f} time(s)`
+    )
+    .join('; ');
+}
+
+function modeQuestion() {
+  const kind = chooseModeType();
+
+  const nums = shuffle(
+    Array.from({ length: 28 }, (_, i) => i + 2)
+  ).slice(0, 6);
+
+  let values = [];
+  let prompt = '';
+  let answer = null;
+  let solution = '';
+
+  /* SINGLE, DOUBLE, TRIPLE OR NO MODE */
+
+  if (
+    kind === 'single' ||
+    kind === 'double' ||
+    kind === 'triple' ||
+    kind === 'none'
+  ) {
+    if (kind === 'none') {
+      values = nums.slice(0, rand(4, 6));
+    } else {
+      const howMany =
+        kind === 'single'
+          ? 1
+          : kind === 'double'
+            ? 2
+            : 3;
+
+      const repeats = rand(2, 4);
+
+      values = [
+        ...nums.slice(0, howMany)
+          .flatMap(x => Array(repeats).fill(x)),
+        ...nums.slice(howMany, howMany + 3)
+      ];
+    }
+
+    values = shuffle(values);
+
+    answer = modeOf(values);
+
+    prompt =
+      `Find the mode(s) of: ${values.join(', ')}.`;
+
+    solution =
+      `${frequencyExplanation(values)}.<br>` +
+      (answer.length
+        ? `Mode(s): <strong>${answer.join(', ')}</strong>.`
+        : `All values have equal frequency: <strong>No mode</strong>.`);
+  }
+
+  /* MISSING FREQUENCY */
+
+  else if (kind === 'missingFreq') {
+    const [a, b, c] = nums;
+
+    const f = rand(3, 5);
+    const g = rand(1, f - 1);
+
+    values = [
+      ...Array(f).fill(a),
+      ...Array(g).fill(b),
+      c
+    ];
+
+    answer = String(f - g);
+
+    prompt =
+      `In a data set, ${a} occurs ${f} times, ${b} occurs ${g} times, and ${c} occurs once. How many additional copies of ${b} are needed to make the data set bimodal?`;
+
+    solution =
+      `${a} has frequency ${f}; ${b} currently has frequency ${g}.<br>` +
+      `Add ${f} − ${g} = <strong>${answer}</strong> copies of ${b} so they tie.`;
+  }
+
+  /* MISSING OBSERVATION */
+
+  else if (kind === 'missingObs') {
+    const [a, b, c] = nums;
+
+    values = [a, a, b, b, c];
+
+    answer = String(a);
+
+    prompt =
+      `The data set is ${shuffle(values).join(', ')}, x. If x is restricted to ${a} or ${c}, what must x be to make ${a} the unique mode?`;
+
+    solution =
+      `Initially ${a} and ${b} each occur twice. Setting x = ${a} makes its frequency 3, the unique maximum.<br>` +
+      `Answer: <strong>${a}</strong>.`;
+  }
+
+  /* ADDING OR REMOVING OBSERVATIONS */
+
+  else if (
+    kind === 'adding' ||
+    kind === 'removing'
+  ) {
+    const [a, b, c] = nums;
+
+    const base = [
+      a, a,
+      b, b, b,
+      c
+    ];
+
+    if (kind === 'adding') {
+      const add = a;
+
+      values = [...base, add];
+
+      prompt =
+        `The data set is ${shuffle(base).join(', ')}. If ${add} is added, find all modes of the new data set.`;
+    } else {
+      values = [...base];
+
+      values.splice(
+        values.indexOf(b),
+        1
+      );
+
+      prompt =
+        `The data set is ${shuffle(base).join(', ')}. If one occurrence of ${b} is removed, find all modes of the new data set.`;
+    }
+
+    answer = modeOf(values);
+
+    solution =
+      `After the change, ${frequencyExplanation(values)}.<br>` +
+      `Mode(s): <strong>${display(answer)}</strong>.`;
+  }
+
+  /* MODE TRANSFORMATION */
+
+  else if (kind === 'transform') {
+    const [a, b, c] = nums;
+    const k = rand(2, 6);
+
+    const initial = [
+      a, a, a,
+      b, b,
+      c
+    ];
+
+    values = initial.map(v => v * k);
+
+    answer = modeOf(values);
+
+    prompt =
+      `The original data are ${shuffle(initial).join(', ')}. If every value is multiplied by ${k}, find the mode of the transformed data.`;
+
+    solution =
+      `The original mode is ${a}. Multiplying all values by ${k} preserves frequencies.<br>` +
+      `New mode = ${a} × ${k} = <strong>${display(answer)}</strong>.`;
+  }
+
+  /* MODE COMPARISON */
+
+  else if (kind === 'comparison') {
+    const [a, b, c, d] = nums;
+
+    const A = [
+      a, a, a,
+      b, b,
+      c
+    ];
+
+    const B = [
+      a, a,
+      b, b,
+      c, d
+    ];
+
+    answer = String(modeOf(B).length);
+
+    prompt =
+      `Data set A is ${shuffle(A).join(', ')}. Data set B is ${shuffle(B).join(', ')}. How many modal values does data set B have?`;
+
+    solution =
+      `${frequencyExplanation(B)}.<br>` +
+      `B has <strong>${answer}</strong> modal values.`;
+
+    values = B;
+  }
+
+  return {
+    skill: 'Mode',
+    type: 'Frequency analysis',
+    kind,
+    prompt,
+    answer,
+    solution,
+    values
+  };
+}
+
+/* =====================================================
+   09. MAIN QUESTION SELECTOR
+===================================================== */
+
+function newQuestion() {
+  const skill = chooseSkill();
+
+  if (skill === 'Mean') {
+    return meanQuestion();
+  }
+
+  if (skill === 'Median') {
+    return medianQuestion();
+  }
+
+  return modeQuestion();
+}
+
+/* =====================================================
+   10. NUMERIC ANSWER VALIDATION
+===================================================== */
+
+function numeric(value) {
+  const s = String(value)
+    .trim()
+    .replace(/−/g, '-')
+    .replace(/\s+/g, '');
+
+  if (
+    /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(s)
+  ) {
+    return Number(s);
+  }
+
+  if (
+    /^[-+]?\d+\/[-+]?\d+$/.test(s)
+  ) {
+    const [n, d] = s.split('/').map(Number);
+
+    return d !== 0 ? n / d : NaN;
+  }
+
+  return NaN;
+}
+
+function isCorrectChoice(given, expected) {
+  if (Array.isArray(expected)) {
+    return isCorrect(given, expected);
+  }
+
+  const actual = numeric(given);
+  const correct = numeric(expected);
+
+  if (
+    !Number.isFinite(actual) ||
+    !Number.isFinite(correct)
+  ) {
+    return false;
+  }
+
+  // Accept four-decimal rounded MCQ options.
+  return Math.abs(actual - correct) < 0.00005;
+}
+
+function isCorrect(given, expected) {
+  if (Array.isArray(expected)) {
+    const text = String(given)
+      .trim()
+      .toLowerCase();
+
+    if (expected.length === 0) {
+      return [
+        'none',
+        'no mode',
+        'no modes',
+        'no modal value'
+      ].includes(text);
+    }
+
+    const entries = text.split(',').map(numeric);
+
+    const target = [...expected]
+      .sort((a, b) => a - b);
+
+    if (
+      entries.length !== target.length ||
+      !entries.every(Number.isFinite) ||
+      new Set(entries).size !== entries.length
+    ) {
+      return false;
+    }
+
+    entries.sort((a, b) => a - b);
+
+    return entries.every(
+      (value, i) => value === target[i]
+    );
+  }
+
+  const a = numeric(given);
+  const b = numeric(expected);
+
+  return (
+    Number.isFinite(a) &&
+    Number.isFinite(b) &&
+    Math.abs(a - b) < 1e-9
+  );
+}
+
+/* =====================================================
+   11. CET-STYLE MULTIPLE CHOICE GENERATOR
+===================================================== */
+
+function optionsFor(q) {
+  const choices = [display(q.answer)];
+
+  function add(candidate) {
+    const value = String(candidate).trim();
+
+    if (!value) return;
+
+    if (
+      choices.some(c =>
+        isCorrect(c, q.answer) &&
+        isCorrect(value, q.answer)
+      )
+    ) {
+      if (isCorrect(value, q.answer)) return;
+    }
+
+    if (Array.isArray(q.answer)) {
+      const key = s => {
+        const text = String(s)
+          .trim()
+          .toLowerCase();
+
+        if (
+          [
+            'none',
+            'no mode',
+            'no modes',
+            'no modal value'
+          ].includes(text)
+        ) {
+          return 'none';
+        }
+
+        const nums = text.split(',').map(numeric);
+
+        if (
+          !nums.every(Number.isFinite) ||
+          new Set(nums).size !== nums.length
+        ) {
+          return 'invalid';
+        }
+
+        return nums
+          .sort((a, b) => a - b)
+          .join(',');
+      };
+
+      if (key(value) === 'invalid') return;
+
+      if (
+        choices.some(
+          c => key(c) === key(value)
+        )
+      ) {
+        return;
+      }
+
+      choices.push(value);
+      return;
+    }
+
+    const number = numeric(value);
+
+    if (!Number.isFinite(number)) return;
+
+    if (
+      choices.some(c =>
+        Math.abs(numeric(c) - number) < 1e-9
+      )
+    ) {
+      return;
+    }
+
+    choices.push(value);
+  }
+
+  /* MODE OPTIONS */
+
+  if (Array.isArray(q.answer)) {
+    const unique = [...new Set(q.values)]
+      .sort((a, b) => a - b);
+
+    const pool = ['No mode'];
+
+    unique.forEach(v => {
+      pool.push(String(v));
+    });
+
+    for (let i = 0; i < unique.length; i++) {
+      for (let j = i + 1; j < unique.length; j++) {
+        pool.push(
+          `${unique[i]}, ${unique[j]}`
+        );
+      }
+    }
+
+    if (q.answer.length >= 2) {
+      pool.push(
+        q.answer.slice(0, -1).join(', ')
+      );
+    }
+
+    for (const candidate of shuffle(pool)) {
+      if (choices.length >= 4) break;
+      add(candidate);
+    }
+
+    for (
+      let i = 1;
+      choices.length < 4;
+      i++
+    ) {
+      add(i);
+    }
+  }
+
+  /* NUMERIC OPTIONS */
+
+  else {
+    const correct = numeric(q.answer);
+    const pool = [];
+
+    const matched =
+      String(q.answer).match(/^(-?\d+)\/(\d+)$/);
+
+    if (
+      q.kind === 'weightedDirect' ||
+      q.kind === 'weightedUnknown' ||
+      q.kind === 'frequencyWeighted'
+    ) {
+      pool.push(
+        correct + 2,
+        correct - 2,
+        correct + 5,
+        correct - 5,
+        correct + 10,
+        correct - 10
+      );
+    }
+
+    if (q.kind === 'consecutive') {
+      pool.push(
+        correct - 1,
+        correct + 1,
+        correct - 2,
+        correct + 2,
+        correct - 3,
+        correct + 3
+      );
+    }
+
+    if (
+      q.skill === 'Median' &&
+      q.values &&
+      ![
+        'missing',
+        'target',
+        'compare',
+        'algebraic'
+      ].includes(q.kind)
+    ) {
+      const ordered = [...q.values]
+        .sort((a, b) => a - b);
+
+      pool.push(
+        ordered[0],
+        ordered[ordered.length - 1],
+        ordered[Math.floor((ordered.length - 1) / 2)],
+        ordered[Math.floor(ordered.length / 2)]
+      );
+    }
+
+    if (matched) {
+      const n = Number(matched[1]);
+      const d = Number(matched[2]);
+
+      pool.push(
+        fraction(n + 1, d),
+        fraction(n - 1, d),
+        fraction(n + 2, d),
+        fraction(n - 2, d),
+        fraction(n, d + 1),
+        fraction(n, d + 2),
+        fraction(n, Math.max(1, d - 1))
+      );
+    } else {
+      pool.push(
+        correct - 1,
+        correct + 1,
+        correct - 2,
+        correct + 2,
+        correct - 3,
+        correct + 3,
+        correct - 4,
+        correct + 4
+      );
+    }
+
+    for (const candidate of shuffle(pool)) {
+      if (choices.length >= 4) break;
+      add(candidate);
+    }
+
+    for (
+      let step = 1;
+      choices.length < 4 && step <= 50;
+      step++
+    ) {
+      if (matched) {
+        const n = Number(matched[1]);
+        const d = Number(matched[2]);
+
+        add(fraction(n + step, d));
+        add(fraction(n - step, d));
+      } else {
+        add(correct + step);
+        add(correct - step);
+      }
+    }
+  }
+
+  if (
+    choices.length !== 4 ||
+    choices.filter(
+      c => isCorrectChoice(c, q.answer)
+    ).length !== 1
+  ) {
+    throw new Error(
+      'Multiple-choice validation failed: ' + q.prompt
+    );
+  }
+
+  /* DISPLAY FRACTIONAL ANSWERS AS DECIMALS */
+
+  if (
+    !Array.isArray(q.answer) &&
+    !Number.isInteger(numeric(q.answer))
+  ) {
+    return shuffle(choices).map(choice => {
+      const value = numeric(choice);
+
+      if (!Number.isFinite(value)) {
+        return choice;
+      }
+
+      return Number(
+        value.toFixed(4)
+      ).toString();
+    });
+  }
+
+  return shuffle(choices);
+}
+
+/* =====================================================
+   12. TIMER HELPERS
+===================================================== */
+
+function cancelAutoNext() {
+  if (state.autoNext !== null) {
+    clearTimeout(state.autoNext);
+    state.autoNext = null;
+  }
+}
+
+function pauseForSolution() {
+  if (
+    settings.clock === 'timed' &&
+    state.pauseStarted === null
+  ) {
+    state.pauseStarted = Date.now();
+  }
+}
+
+function resumeFromSolution() {
+  if (state.pauseStarted !== null) {
+    state.deadline +=
+      Date.now() - state.pauseStarted;
+
+    state.pauseStarted = null;
+  }
+}
+
+/* =====================================================
+   13. MIXED ANSWER FORMAT
+===================================================== */
+
+function chooseQuestionFormat() {
+  return settings.format === 'Mixed'
+    ? pick(['Multiple Choice', 'Type Answer'])
+    : settings.format;
+}
+
+/* =====================================================
+   14. RENDER QUESTION
+===================================================== */
+
+function renderQuestion() {
+  if (!state.active || state.gameOver) return;
+
+  cancelAutoNext();
+  resumeFromSolution();
+
+  state.locked = false;
+  state.selected = null;
+
+  let q;
+
+  for (let i = 0; i < 12; i++) {
+    q = newQuestion();
+
+    const signature = q.skill + q.prompt;
+
+    if (signature !== state.lastSignature) {
+      state.lastSignature = signature;
+      break;
+    }
+  }
+
+  state.question = q;
+  state.currentFormat = chooseQuestionFormat();
+
+  const isMC =
+    state.currentFormat === 'Multiple Choice';
+
+  const isTyped =
+    state.currentFormat === 'Type Answer';
+
+  $('prompt').textContent = q.prompt;
+
+
+/* =========================================
+   DYNAMIC QUESTION INSTRUCTIONS
+========================================= */
+
+if (isMC) {
+
+  $('instruction').textContent =
+    q.skill === 'Mode' && Array.isArray(q.answer)
+      ? 'Select all modal values in a single choice, or select No mode when applicable.'
+      : 'Select the correct answer.';
+
+} else if (isTyped) {
+
+  $('instruction').textContent =
+    q.skill === 'Mode' && Array.isArray(q.answer)
+      ? 'Enter all modal values separated by commas, or type "none" if there is no mode.'
+      : 'Enter the exact value. Fractions are allowed.';
+
+}
+
+  
+/* =========================================
+   DYNAMIC TYPED ANSWER HINT
+========================================= */
+
+$('answerHint').textContent =
+  q.skill === 'Mode' && Array.isArray(q.answer)
+    ? 'Separate multiple modes with commas. Type "none" if there is no mode.'
+    : 'Fractions and decimals are accepted.';
+
+
+  $('skillTag').textContent =
+    q.skill.toUpperCase();
+
+  $('typeTag').textContent =
+    q.type.toUpperCase();
+
+  $('qNum').textContent =
+    String(state.attempts + 1).padStart(2, '0');
+
+  $('correct').textContent = state.correct;
+  $('wrong').textContent = state.wrong;
+
+  $('feedback').textContent = '';
+  $('feedback').className = 'feedback';
+
+  $('solution').innerHTML = '';
+
+  show('solution', false);
+  show('reveal', true);
+  show('next', false);
+
+  show('submit', isTyped);
+  show('typedArea', isTyped);
+  show('choices', isMC);
+
+  $('answer').disabled = false;
+  $('answer').value = '';
+
+  $('choices').innerHTML = '';
+
+  $('next').textContent = 'NEXT QUESTION →';
+
+  if (isMC) {
+    optionsFor(q).forEach((choice, i) => {
+      const button = document.createElement('button');
+
+      button.type = 'button';
+      button.className = 'choice';
+
+      button.textContent =
+        `${'ABCD'[i]}. ${choice}`;
+
+      button.dataset.value = choice;
+
+      button.onclick = () => {
+        if (
+          !state.active ||
+          state.locked ||
+          state.gameOver
+        ) {
+          return;
+        }
+
+        state.selected = choice;
+
+        button.classList.add('selected');
+
+        record(
+          isCorrectChoice(
+            choice,
+            state.question.answer
+          ),
+          false
+        );
+      };
+
+      $('choices').appendChild(button);
+    });
+  }
+}
+
+/* =====================================================
+   15. RECORD ANSWER
+
+   CORRECT: +1 CORRECT
+   WRONG: +1 ERROR
+   SHOW SOLUTION: +1 ERROR
+
+   2 TOTAL ERRORS = GAME OVER
+   NO ERROR RESET
+===================================================== */
+
+function record(correct, revealed = false) {
+  if (
+    !state.active ||
+    state.locked ||
+    state.gameOver
+  ) {
+    return;
+  }
+
+  cancelAutoNext();
+
+  state.locked = true;
+  state.attempts++;
+
+  if (correct) {
+    state.correct++;
+  } else {
+    state.wrong++;
+  }
+
+  state.gameOver = state.wrong >= MAX_ERRORS;
+
+  state.history.push({
+    q: state.question.prompt,
+    skill: state.question.skill,
+    format: state.currentFormat,
+    answer: display(state.question.answer),
+    correct,
+    revealed
+  });
+
+  $('correct').textContent = state.correct;
+  $('wrong').textContent = state.wrong;
+
+  const feedback = $('feedback');
+
+  feedback.className =
+    'feedback ' + (correct ? 'good' : 'bad');
+
+  document.querySelectorAll('.choice').forEach(button => {
+    button.disabled = true;
+
+    const answerIsCorrect = isCorrectChoice(
+      button.dataset.value,
+      state.question.answer
+    );
+
+    const wasSelected =
+      button.dataset.value === state.selected;
+
+    if (answerIsCorrect) {
+      button.classList.add('correct-choice');
+    }
+
+    if (wasSelected && !answerIsCorrect) {
+      button.classList.remove('selected');
+      button.classList.add('wrong-choice');
+
+      button.style.background =
+        'rgba(239,68,68,.22)';
+
+      button.style.border =
+        '2px solid #f87171';
+
+      button.style.color =
+        '#fecaca';
+    }
+  });
+
+  $('answer').disabled = true;
+
+  $('solution').innerHTML = `
+    <p><strong>WORKED SOLUTION</strong></p>
+    <p>${state.question.solution}</p>
+  `;
+
+  show('submit', false);
+  show('reveal', false);
+  show('next', true);
+
+  $('next').textContent =
+    state.gameOver
+      ? 'VIEW FINAL RESULTS →'
+      : 'NEXT QUESTION →';
+
+  if (correct) {
+    feedback.textContent = '✓ CORRECT!';
+
+    show('solution', true);
+
+    const currentQuestion = state.question;
+
+    state.autoNext = setTimeout(() => {
+      state.autoNext = null;
+
+      if (
+        state.active &&
+        !state.gameOver &&
+        state.locked &&
+        state.question === currentQuestion
+      ) {
+        renderQuestion();
+      }
+    }, AUTO_NEXT_DELAY);
+  } else {
+    feedback.textContent =
+      state.gameOver
+        ? '✕ GAME OVER — 2/2 TOTAL ERRORS.'
+        : revealed
+          ? `⚠ Solution revealed — ${state.wrong}/2 errors.`
+          : `✕ Incorrect. Correct answer: ${display(state.question.answer)}. (${state.wrong}/2 errors)`;
+
+    show('solution', true);
+
+    // Allow unlimited solution review.
+    pauseForSolution();
+  }
+}
+
+/* =====================================================
+   16. TYPED ANSWER SUBMISSION
+===================================================== */
+
+function check() {
+  if (
+    !state.active ||
+    state.locked ||
+    state.gameOver
+  ) {
+    return;
+  }
+
+  if (
+    state.currentFormat !== 'Type Answer'
+  ) {
+    return;
+  }
+
+  const value = $('answer').value.trim();
+
+  if (!value) {
+    $('feedback').textContent =
+      'Enter an answer first.';
+
+    $('feedback').className =
+      'feedback bad';
+
+    return;
+  }
+
+  record(
+    isCorrect(
+      value,
+      state.question.answer
+    ),
+    false
+  );
+}
+
+/* =====================================================
+   17. NEXT QUESTION
+===================================================== */
+
+function goNext() {
+  if (!state.active || !state.locked) {
+    return;
+  }
+
+  cancelAutoNext();
+
+  if (state.gameOver) {
+    end('GAME OVER — 2 TOTAL ERRORS.');
+    return;
+  }
+
+  renderQuestion();
+}
+
+/* =====================================================
+   18. COUNTDOWN
+===================================================== */
+
+function updateClock() {
+  if (
+    !state.active ||
+    settings.clock !== 'timed'
+  ) {
+    return;
+  }
+
+  const effectiveNow =
+    state.pauseStarted ?? Date.now();
+
+  const remaining = Math.max(
+    0,
+    Math.ceil(
+      (state.deadline - effectiveNow) / 1000
+    )
+  );
+
+  state.remaining = remaining;
+
+  $('clock').textContent =
+    `${String(Math.floor(remaining / 60)).padStart(2, '0')}:` +
+    `${String(remaining % 60).padStart(2, '0')}`;
+
+  $('timeFill').style.width =
+    `${remaining / settings.seconds * 100}%`;
+
+  if (remaining === 0) {
+    end('Your practice time has ended.');
+  }
+}
+
+/* =====================================================
+   19. START PRACTICE
+
+   NEW: RESTORE NORMAL DESIGN WHEN RESTARTING
+===================================================== */
+
+function start() {
+  if (!settings.skills.length) {
+    return;
+  }
+
+  // Restore standard HULAGPOS appearance.
+
+document.body.classList.remove(
+  'fail-state',
+  'run-ended'
+);
+
+
+  $('results').classList.remove(
+    'result-error',
+    'result-time',
+    'result-quit'
+  );
+
+  if ($('resultsPanel')) {
+    $('resultsPanel').classList.remove(
+      'result-error',
+      'result-time',
+      'result-quit'
+    );
+  }
+
+  if (settings.clock === 'timed') {
+    const mins = Number($('minutes').value);
+    const secs = Number($('seconds').value);
+
+    if (
+      !Number.isInteger(mins) ||
+      !Number.isInteger(secs) ||
+      mins < 0 ||
+      mins > 240 ||
+      secs < 0 ||
+      secs > 59 ||
+      mins * 60 + secs < 1
+    ) {
+      alert(
+        'Set a valid time between 00:01 and 240:59.'
+      );
+
+      return;
+    }
+
+    settings.seconds = mins * 60 + secs;
+  }
+
+  clearInterval(state.timer);
+  cancelAutoNext();
+
+  state = createState();
+
+  state.active = true;
+  state.remaining = settings.seconds;
+
+  state.deadline =
+    Date.now() + settings.seconds * 1000;
+
+  show('setup', false);
+  show('results', false);
+  show('game', true);
+
+  show(
+    'timeTrack',
+    settings.clock === 'timed'
+  );
+
+  $('clock').textContent =
+    settings.clock === 'timed'
+      ? '00:00'
+      : 'UNTIMED';
+
+  renderQuestion();
+
+  if (settings.clock === 'timed') {
+    updateClock();
+
+    state.timer = setInterval(
+      updateClock,
+      200
+    );
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+/* =====================================================
+   20. END PRACTICE
+
+   NEW:
+   ERROR LIMIT = RED FAIL STATE
+   TIME EXPIRED = GOLD ENDING
+   MANUAL EXIT = NEUTRAL ENDING
+===================================================== */
+
+function end(
+  reason = 'Run ended by learner.'
+) {
+  if (!state.active) {
+    return;
+  }
+
+  
+document.body.classList.add('run-ended');
+
+
+  const resultsPanel = $('results');
+  const innerResultsPanel = $('resultsPanel');
+
+  // Reset the visual status before assigning a new one.
+
+  resultsPanel.classList.remove(
+    'result-error',
+    'result-time',
+    'result-quit'
+  );
+
+  if (innerResultsPanel) {
+    innerResultsPanel.classList.remove(
+      'result-error',
+      'result-time',
+      'result-quit'
+    );
+  }
+
+
+
+document.body.classList.remove('fail-state');
+
+
+  let statusClass;
+
+  /* -----------------------------------------
+     ENDING A: TWO TOTAL ERRORS
+  ----------------------------------------- */
+
+  if (state.wrong >= MAX_ERRORS) {
+    statusClass = 'result-error';
+
+    // Hides the hero through body.fail-state CSS.
+    document.body.classList.add('fail-state');
+
+    $('resultStatus').textContent =
+      'RUN FAILED / ERROR LIMIT';
+
+    $('resultCode').textContent =
+      'END / ERROR 02';
+
+    $('resultHeadline').textContent =
+      'RUN FAILED.';
+
+    reason =
+      'You reached two total errors. The arena has been shut down for this run. Review the breakdown below and return better prepared.';
+  }
+
+  /* -----------------------------------------
+     ENDING B: TIME EXPIRED
+  ----------------------------------------- */
+
+  else if (
+    settings.clock === 'timed' &&
+    state.remaining <= 0
+  ) {
+    statusClass = 'result-time';
+
+    $('resultStatus').textContent =
+      'SESSION COMPLETE / TIME EXPIRED';
+
+    $('resultCode').textContent =
+      'END / TIME';
+
+    $('resultHeadline').textContent =
+      'TIME IS UP.';
+
+    reason =
+      'Your allotted training time has ended. Review your performance below.';
+  }
+
+  /* -----------------------------------------
+     ENDING C: MANUAL EXIT
+  ----------------------------------------- */
+
+  else {
+    statusClass = 'result-quit';
+
+    $('resultStatus').textContent =
+      'SESSION CLOSED / VOLUNTARY EXIT';
+
+    $('resultCode').textContent =
+      'END / EXIT';
+
+    $('resultHeadline').textContent =
+      'RUN CONCLUDED.';
+
+    reason =
+      'You ended this training session. Your recorded attempts are summarized below.';
+  }
+
+  resultsPanel.classList.add(statusClass);
+
+  if (innerResultsPanel) {
+    innerResultsPanel.classList.add(statusClass);
+  }
+
+  
+/* =========================================
+   DYNAMIC RESULTS LABELS
+========================================= */
+
+const isErrorEnding = statusClass === 'result-error';
+const isTimeEnding = statusClass === 'result-time';
+
+$('endingKicker').textContent =
+  isErrorEnding
+    ? 'SESSION TERMINATED'
+    : isTimeEnding
+      ? 'TIME LIMIT REACHED'
+      : 'SESSION CONCLUDED';
+
+$('autopsyTitle').textContent =
+  isErrorEnding
+    ? 'WHERE YOU BROKE.'
+    : 'YOUR RUN, REVIEWED.';
+
+document.querySelector('.rail-symbol').textContent =
+  isErrorEnding
+    ? '✕'
+    : isTimeEnding
+      ? '⌛'
+      : '✓';
+
+  
+  /* -----------------------------------------
+     STOP THE RUN
+  ----------------------------------------- */
+
+  state.active = false;
+
+  clearInterval(state.timer);
+  cancelAutoNext();
+
+  show('game', false);
+  show('results', true);
+
+  /* -----------------------------------------
+     POPULATE PERFORMANCE SUMMARY
+  ----------------------------------------- */
+
+  $('endReason').textContent = reason;
+
+  $('rTotal').textContent =
+    state.attempts;
+
+  $('rCorrect').textContent =
+    state.correct;
+
+  $('rWrong').textContent =
+    state.wrong;
+
+  $('rAccuracy').textContent =
+    (
+      state.attempts
+        ? Math.round(
+            state.correct / state.attempts * 100
+          )
+        : 0
+    ) + '%';
+
+  /* -----------------------------------------
+     POST-RUN QUESTION ANALYSIS
+  ----------------------------------------- */
+
+  $('review').innerHTML = '';
+
+  
+state.history.forEach(item => {
+
+    const div = document.createElement('div');
+
+    div.className =
+      'review-item ' +
+      (item.correct ? 'good' : 'bad');
+
+    div.textContent =
+      `${item.correct ? '✓' : '✕'} ` +
+      `${item.skill}: ${item.q}`;
+
+    const small =
+      document.createElement('small');
+
+    small.textContent =
+      `Format: ${item.format} · Answer: ${item.answer}` +
+      (item.revealed
+        ? ' · solution revealed'
+        : '');
+
+    div.appendChild(small);
+    $('review').appendChild(div);
+  });
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+/* =====================================================
+   21. EVENT LISTENERS
+===================================================== */
+
+/* GAME TYPE */
+
+$('skillOpen').onclick =
+  () => openModal('skills');
+
+/* DIFFICULTY */
+
+$('diffOpen').onclick =
+  () => openModal('difficulty');
+
+/* ANSWER FORMAT */
+
+$('formatOpen').onclick =
+  () => openModal('format');
+
+/* MODAL CONTROLS */
+
+$('closeModal').onclick = closeModal;
+$('doneModal').onclick = closeModal;
+
+$('modal').addEventListener('click', e => {
+  if (e.target === $('modal')) {
+    closeModal();
+  }
+});
+
+/* SELECT ALL GAME TYPES */
+
+$('allSkills').onclick = () => {
+  settings.skills = [
+    'Mean',
+    'Median',
+    'Mode'
+  ];
+
+  openModal('skills');
+};
+
+/* TIMED / UNTIMED */
+
+document.querySelectorAll('[data-clock]').forEach(button => {
+  button.onclick = () => {
+    settings.clock =
+      button.dataset.clock;
+
+    refreshSettings();
+  };
+});
+
+/* START */
+
+$('start').onclick = start;
+
+/* TYPED ANSWER */
+
+$('submit').onclick = check;
+
+/* SHOW SOLUTION = ONE ERROR */
+
+$('reveal').onclick = () => {
+  if (
+    !state.active ||
+    state.locked ||
+    state.gameOver
+  ) {
+    return;
+  }
+
+  record(false, true);
+};
+
+/* NEXT QUESTION */
+
+$('next').onclick = goNext;
+
+/* END RUN */
+
+$('quit').onclick = () => end();
+
+/* RESTART THE ARENA */
+
+$('restart').onclick = start;
+
+/* CHANGE PARAMETERS */
+
+$('back').onclick = () => {
+
+document.body.classList.remove(
+  'fail-state',
+  'run-ended'
+);
+
+
+  $('results').classList.remove(
+    'result-error',
+    'result-time',
+    'result-quit'
+  );
+
+  if ($('resultsPanel')) {
+    $('resultsPanel').classList.remove(
+      'result-error',
+      'result-time',
+      'result-quit'
+    );
+  }
+
+  show('results', false);
+  show('setup', true);
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+};
+
+/* ENTER TO SUBMIT TYPED ANSWER */
+
+$('answer').addEventListener('keydown', e => {
+  if (
+    e.key === 'Enter' &&
+    !state.locked &&
+    state.currentFormat === 'Type Answer'
+  ) {
+    check();
+  }
+});
+
+/* ESCAPE TO CLOSE SETTINGS */
+
+
+document.addEventListener('keydown', e => {
+  if (
+    e.key === 'Escape' &&
+    !$('modal').classList.contains('hidden')
+  ) {
+    closeModal();
+  }
+});
+
+/* =====================================================
+   22. INITIALIZE
+===================================================== */
+
+refreshSettings();
+
+
+  </script>
+
+</body>
+
+</html>
